@@ -11,8 +11,8 @@ function [c_hat, L_hat, m_hat] = estimateParameters(u_s, x_s, t_s, Lambda, g)
     
         % Estimate parameters using least squares method
         theta = (phi' * phi) \ (phi' * x_s);
-        c_hat = (theta(1) + Lambda(2)) / theta(3);
-        L_hat = g / (Lambda(3) + theta(2));
+        c_hat = (theta(1) + Lambda(1)) / theta(3);
+        L_hat = g / (Lambda(2) + theta(2));
         m_hat = 1 / (theta(3) * L_hat^2);
     else
         % The derivative of the output is available
@@ -21,9 +21,9 @@ function [c_hat, L_hat, m_hat] = estimateParameters(u_s, x_s, t_s, Lambda, g)
         phi(:,3) = lsim(tf(1, Lambda), u_s, t_s);
 
         % Estimate parameters using least squares method
-        theta = (phi' * phi) \ (phi' * x_s(:,2));
-        c_hat = (theta(1) + Lambda(2)) / theta(3);
-        L_hat = g / theta(2);
+        theta = (phi' * phi) \ (phi' * x_s(:,1));
+        c_hat = (theta(1) + Lambda(1)) / theta(3);
+        L_hat = g / (Lambda(2) + theta(2));
         m_hat = 1 / (theta(3) * L_hat^2);
     end
 end

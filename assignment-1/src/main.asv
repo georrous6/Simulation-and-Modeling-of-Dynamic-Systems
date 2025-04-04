@@ -198,4 +198,4 @@ end
 fileName = 'task3_parameter_estimation_error_vs_input_amplitude.pdf';
 legendText = {'c with $\dot{q}$', 'L with $\dot{q}$', 'm with $\dot{q}$', ...
     'c without $\dot{q}$', 'L without $\dot{q}$', 'm without $\dot{q}$'};
-plotAndExport(A0_values, rel_error, '$A_0$', 'Relative Error \%', 'Relative Error vs Input Amplitude', outputDir, fileName, legendText);
+plotAndExport(Ts_values, rel_error, '$T_s$ (sec)', 'Relative Error \%', 'Relative Error vs Input Amplitude', outputDir, fileName, legendText);
