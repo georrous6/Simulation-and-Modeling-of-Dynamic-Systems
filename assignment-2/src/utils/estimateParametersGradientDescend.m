@@ -6,7 +6,6 @@ function [m_hat, b_hat, k_hat, y_hat] = estimateParametersGradientDescend(x, u, 
     k_hat = NaN(N, 1);
     y_hat = NaN(N, 1);
 
-
     lambda1 = Lambda(2);
     lambda2 = Lambda(3);
 
@@ -16,16 +15,15 @@ function [m_hat, b_hat, k_hat, y_hat] = estimateParametersGradientDescend(x, u, 
     phi(:,3) = lsim(tf(1, Lambda), u(:), t(:));
 
     theta_hat = [lambda2 - k_0 / m_0, lambda1 - b_0 / m_0, 1 / m_0];
-    for k = 1:N-1
+    for k = 1:N
         y_hat(k) = theta_hat * phi(k,:)';
         e = x(k,1) - y_hat(k);
-        theta_hat_dot = gamma * e * phi(k,:);
 
         m_hat(k) = 1 / theta_hat(3);
         b_hat(k) = (lambda1 - theta_hat(2)) / theta_hat(3);
         k_hat(k) = (lambda2 - theta_hat(1)) / theta_hat(3);
 
-        theta_hat = gamma * theta_hat_dot + theta_hat;
+        theta_hat = gamma * e * phi(k,:) + theta_hat;
     end
 
 end
