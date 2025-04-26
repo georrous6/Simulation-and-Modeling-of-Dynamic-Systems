@@ -7,63 +7,66 @@ b = 0.225;
 k = 0.725;
 
 m_0 = 1.0;
-b_0 = 0.17;
+b_0 = 0.1;
 k_0 = 0.5;
 
 T = 20;
-N = 100;
+dt = 0.01;
 
-t = linspace(0, T, N)';
+t = (0:dt:T)';
+N = length(t);
 
 u1 = @(t) 2.5 * ones(size(t));
 u2 = @(t) 2.5 * sin(t);
-
-odefun1 = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u1(t));
-odefun2 = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u2(t));
-
-y0 = [0; 0];
-[~, y1] = ode45(odefun1, t, y0);
-[~, y2] = ode45(odefun2, t, y0);
+inputs = {u1, u2};
+labels = {'2.5', '2.5*sin(t)'};
 
 p1 = -0.1; % -0.1
 p2 = -0.2; % -0.2
 Lambda = [1, -(p1 + p2), p1 * p2];
-gamma = 1e-4;
+gammas = [1e-5, 1e-3];
+y0 = [0; 0];
+
+T0 = 10;
+alpha0 = 0.001;
+alpha1 = 140;
+
+phi = NaN(N, 3);
 
 %% Input 1
-[m_hat1, b_hat1, k_hat1, y_hat1] = estimateParametersGradientDescend(y1, u1(t), t, m_0, b_0, k_0, Lambda, gamma);
+for i = 1:length(inputs)
 
-figure(1);
-hold on; grid on;
-plot(t, [m_hat1, b_hat1, k_hat1], 'LineWidth', 1);
-plot(t, repmat([m, b, k], N, 1), '--r', 'LineWidth', 1);
-legend({'$\hat{m}$', '$\hat{b}$', '$\hat{k}$'}, 'Interpreter', 'latex');
-xlabel('t');
-title('Parameter estimations over time for input signal: u(t)=2.5');
+    u = inputs{i};
+    odefun = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u(t));
+    [~, y] = ode45(odefun, t, y0);
+    phi(:,1) = lsim(tf(1, Lambda), y(:,1), t(:));
+    phi(:,2) = lsim(tf(1, Lambda), y(:,2), t(:));
+    phi(:,3) = lsim(tf(1, Lambda), u(t), t(:));
 
-e1 = y1(:,1) - y_hat1;
-figure(2);
-hold on; grid on;
-plot(t, [y1(:,1), y_hat1, e1], 'LineWidth', 1);
-legend({'$y$', '$\hat{y}$', 'e'}, 'Interpreter', 'latex');
-xlabel('t');
-title('Simulation error over time for input signal: u(t)=2.5');
-
-% %% Input 2
-% [m_hat2, b_hat2, k_hat2, y_hat2] = estimateParametersGradientDescend(y1, u1(t), t, m_0, b_0, k_0, Lambda, gamma);
-% 
-% figure(3);
-% hold on; grid on;
-% plot(t, [m_hat2, b_hat2, k_hat2], 'LineWidth', 1);
-% plot(t, repmat([m, b, k], N, 1), '--r', 'LineWidth', 1);
-% legend({'$\hat{m}$', '$\hat{b}$', '$\hat{k}$'}, 'Interpreter', 'latex');
-% xlabel('t');
-% title('Parameter estimations over time for input signal: u(t)=2.5*sin(t)');
-% 
-% e2 = y2(:,1) - y_hat2;
-% figure(4);
-% hold on; grid on;
-% plot(t, [y2(:,1), y_hat2, e2], 'LineWidth', 1);
-% legend({'$y$', '$\hat{y}$', 'e'}, 'Interpreter', 'latex');
-% xlabel('t');
-% title('Simulation error over time for input signal: u(t)=2.5*sin(t)');
+    gamma = gammas(i);
+    [m_hat, b_hat, k_hat, y_hat] = estimateParametersGradientDescend(y(:,1), phi, m_0, b_0, k_0, Lambda, gamma);
+    
+    figure;
+    hold on; grid on;
+    plot(t, [m_hat, b_hat, k_hat], 'LineWidth', 1);
+    plot(t, repmat([m, b, k], N, 1), '--r', 'LineWidth', 1);
+    legend({'$\hat{m}$', '$\hat{b}$', '$\hat{k}$'}, 'Interpreter', 'latex');
+    xlabel('t');
+    title(sprintf('Parameter estimations over time for input signal: u(t)=%s', labels{i}));
+    
+    e = y(:,1) - y_hat;
+    figure;
+    hold on; grid on;
+    plot(t, [y(:,1), y_hat, e], 'LineWidth', 1);
+    legend({'$y$', '$\hat{y}$', 'e'}, 'Interpreter', 'latex');
+    xlabel('t');
+    title(sprintf('Simulation error over time for input signal: u(t)=%s', labels{i}));
+    
+    figure;
+    is_PE = persistenceOfExcitationCondition(phi, t, T0, alpha0, alpha1);
+    if is_PE
+        fprintf('Persistence of Excitation Condition is satisfied for u(t)=%s\n', labels{i});
+    else
+        fprintf('Persistence of Excitation Condition is NOT satisfied for u(t)=%s\n', labels{i});
+    end
+end
