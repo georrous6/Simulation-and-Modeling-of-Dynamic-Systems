@@ -1,6 +1,12 @@
 clc, clearvars, close all;
 
 addpath('utils\');
+outputDir = fullfile('..', 'plot');
+
+% Check if the output directory exists, if not, create it
+if ~exist(outputDir, 'dir')
+    mkdir(outputDir);
+end
 
 m = 1.315;
 b = 0.225;
@@ -33,7 +39,6 @@ alpha1 = 140;
 
 phi = NaN(N, 3);
 
-%% Input 1
 for i = 1:length(inputs)
 
     u = inputs{i};
@@ -52,7 +57,9 @@ for i = 1:length(inputs)
     plot(t, repmat([m, b, k], N, 1), '--r', 'LineWidth', 1);
     legend({'$\hat{m}$', '$\hat{b}$', '$\hat{k}$'}, 'Interpreter', 'latex');
     xlabel('t');
-    title(sprintf('Parameter estimations over time for input signal: u(t)=%s', labels{i}));
+    title(sprintf('Parameter estimations for input signal u(t)=%s ($$\\gamma=%f$$)', labels{i}, gamma), 'Interpreter', 'latex');
+    filePath = fullfile(outputDir, sprintf('parameter_estimations_%d.pdf', i));
+    exportgraphics(gcf, filePath, 'ContentType', 'vector');
     
     e = y(:,1) - y_hat;
     figure;
@@ -60,10 +67,14 @@ for i = 1:length(inputs)
     plot(t, [y(:,1), y_hat, e], 'LineWidth', 1);
     legend({'$y$', '$\hat{y}$', 'e'}, 'Interpreter', 'latex');
     xlabel('t');
-    title(sprintf('Simulation error over time for input signal: u(t)=%s', labels{i}));
+    title(sprintf('Identification error for input signal u(t)=%s ($$\\gamma=%f$$)', labels{i}, gamma), 'Interpreter', 'latex');
+    filePath = fullfile(outputDir, sprintf('identification_error_%d.pdf', i));
+    exportgraphics(gcf, filePath, 'ContentType', 'vector');
     
     figure;
     is_PE = persistenceOfExcitationCondition(phi, t, T0, alpha0, alpha1);
+    filePath = fullfile(outputDir, sprintf('PE_eigenvalues_%d.pdf', i));
+    exportgraphics(gcf, filePath, 'ContentType', 'vector');
     if is_PE
         fprintf('Persistence of Excitation Condition is satisfied for u(t)=%s\n', labels{i});
     else
