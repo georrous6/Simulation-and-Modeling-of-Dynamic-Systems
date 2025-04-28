@@ -43,13 +43,13 @@ for i = 1:length(inputs)
 
     u = inputs{i};
     odefun = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u(t));
-    [~, y] = ode45(odefun, t, y0);
-    phi(:,1) = lsim(tf(1, Lambda), y(:,1), t(:));
-    phi(:,2) = lsim(tf(1, Lambda), y(:,2), t(:));
+    [~, x] = ode45(odefun, t, y0);
+    phi(:,1) = lsim(tf(1, Lambda), x(:,1), t(:));
+    phi(:,2) = lsim(tf(1, Lambda), x(:,2), t(:));
     phi(:,3) = lsim(tf(1, Lambda), u(t), t(:));
 
     gamma = gammas(i);
-    [m_hat, b_hat, k_hat, y_hat] = estimateParametersGradientDescend(y(:,1), phi, m_0, b_0, k_0, Lambda, gamma);
+    [m_hat, b_hat, k_hat, y_hat] = estimateParametersGradientDescend(x(:,1), phi, m_0, b_0, k_0, Lambda, gamma);
     
     figure;
     hold on; grid on;
@@ -57,17 +57,17 @@ for i = 1:length(inputs)
     plot(t, repmat([m, b, k], N, 1), '--r', 'LineWidth', 1);
     legend({'$\hat{m}$', '$\hat{b}$', '$\hat{k}$'}, 'Interpreter', 'latex');
     xlabel('t');
-    title(sprintf('Parameter estimations for input signal u(t)=%s ($$\\gamma=%f$$)', labels{i}, gamma), 'Interpreter', 'latex');
+    title(sprintf('Parameter estimations for input signal u(t)=%s (gamma=%f)', labels{i}, gamma));
     filePath = fullfile(outputDir, sprintf('parameter_estimations_%d.pdf', i));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
     
-    e = y(:,1) - y_hat;
+    e = x(:,1) - y_hat;
     figure;
     hold on; grid on;
-    plot(t, [y(:,1), y_hat, e], 'LineWidth', 1);
-    legend({'$y$', '$\hat{y}$', 'e'}, 'Interpreter', 'latex');
+    plot(t, [x(:,1), y_hat, e], 'LineWidth', 1);
+    legend({'$x$', '$\hat{x}$', 'e'}, 'Interpreter', 'latex');
     xlabel('t');
-    title(sprintf('Identification error for input signal u(t)=%s ($$\\gamma=%f$$)', labels{i}, gamma), 'Interpreter', 'latex');
+    title(sprintf('Identification error for input signal u(t)=%s (gamma=%f)', labels{i}, gamma));
     filePath = fullfile(outputDir, sprintf('identification_error_%d.pdf', i));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
     

@@ -30,7 +30,7 @@ function is_PE = persistenceOfExcitationCondition(phi, t, T0, alpha0, alpha1)
     plot(t(1:N-L), eigenvalues, 'LineWidth', 1);
     plot(t(1:N-L), T0 * [alpha1, alpha0] .* ones(N-L, 2), '--r', 'LineWidth', 1);
     xlabel('t');
-    title(sprintf('Persistence of Excitation Eigenvalues ($$T_0=%.1f, \\, \\alpha_0 = %.1f,\\, \\alpha_1=%.1f$$)', T0, alpha0, alpha1), 'Interpreter', 'latex');
+    title(sprintf('PE Eigenvalues ($$T_0=%.1f, \\, \\alpha_0 = %.1f,\\, \\alpha_1=%.1f$$)', T0, alpha0, alpha1), 'Interpreter', 'latex');
     legend({'$\lambda_1$', '$\lambda_2$', '$\lambda_3$'}, 'Interpreter', 'latex');
     hold off;
 end
