@@ -1,4 +1,4 @@
-function [m_hat, b_hat, k_hat, y_hat] = estimateParametersGradientDescend(y, phi, m_0, b_0, k_0, Lambda, gamma)
+function [m_hat, b_hat, k_hat, y_hat] = gradientDescend(y, phi, m_0, b_0, k_0, Lambda, gamma)
 
     N = length(y);
     m_hat = NaN(N, 1);
