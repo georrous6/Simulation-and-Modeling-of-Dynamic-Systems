@@ -90,7 +90,15 @@ odefun = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u(t));
 types = {'parallel'};
 
 for i = 1:length(types)
-    [m_hat, b_hat, k_hat, y_hat] = lyapunov(x, m_0, b_0, k_0, u(t), dt, types{i});
+    [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, u(t), dt, types{i}, m, b, k);
+
+    figure;
+    hold on; grid on;
+    plot(t, V_dot, 'LineWidth', 1);
+    xlabel('t');
+    title('Lyapunov derivative function');
+    filePath = fullfile(outputDir, sprintf('task1_lyapunov_derivative_function_%s.pdf', types{i}));
+    exportgraphics(gcf, filePath, 'ContentType', 'vector');
 
     figure;
     hold on; grid on;
