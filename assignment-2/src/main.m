@@ -134,17 +134,46 @@ x_noise = [eta + x(:,1), x(:,2)];
 
 for i = 1:length(structures)
 
-    [m_hat, b_hat, k_hat] = lyapunov(x, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
-    [m_hat_noise, b_hat_noise, k_hat_noise] = lyapunov(x_noise, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+    [m_hat, b_hat, k_hat, y_hat] = lyapunov(x, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+    [m_hat_noise, b_hat_noise, k_hat_noise, y_hat_noise] = lyapunov(x_noise, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
 
     figure;
     hold on; grid on;
-    plot(t, abs([m_hat - m, b_hat - b, k_hat - k]), 'LineWidth', 1);
-    plot(t, abs([m_hat_noise - m, b_hat_noise - b, k_hat_noise - k]), 'LineWidth', 1);
+    plot(t, abs(x(:,1) - y_hat), 'LineWidth', 1);
+    plot(t, abs(x(:,1) - y_hat_noise), 'LineWidth', 1);
 
-    legend({'$|\tilde{m}|$', '$|\tilde{b}|$', '$|\tilde{k}|$', '$|\tilde{m}|$ noise', '$|\tilde{b}|$ noise', '$|\tilde{k}|$ noise'}, 'Interpreter', 'latex');
-    xlabel('t');
-    title(sprintf('Lyapunov (%s): Parameter estimation error for u(t)=%s', structures{i}, labels{2}));
-    filePath = fullfile(outputDir, sprintf('task1_parameter_estimation_error_lyapunov_%s.pdf', structures{i}));
+    legend({'without noise', 'with noise'}, 'Interpreter', 'latex');
+    xlabel('t'); ylabel('|e|');
+    title(sprintf('Lyapunov (%s): Identification error for u(t)=%s', structures{i}, labels{2}));
+    filePath = fullfile(outputDir, sprintf('task1_identification_error_lyapunov_%s_noise.pdf', structures{i}));
+    exportgraphics(gcf, filePath, 'ContentType', 'vector');
+end
+
+eta0_values = linspace(0.1, 1, 10);
+n = length(eta0_values);
+m_tilde = NaN(n, 1);
+b_tilde = NaN(n, 1);
+k_tilde = NaN(n, 1);
+
+for i = 1:length(structures)
+
+    for j = 1:n
+        eta = eta0_values(j) * sin(2 * pi * f0 * t);
+        x_noise = [eta + x(:,1), x(:,2)];
+        [m_hat_noise, b_hat_noise, k_hat_noise, y_hat_noise] = lyapunov(x_noise, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+
+        m_tilde(j) = abs(m - m_hat_noise(end));
+        b_tilde(j) = abs(b - b_hat_noise(end));
+        k_tilde(j) = abs(k - k_hat_noise(end));
+    end
+
+    figure;
+    hold on; grid on;
+    plot(eta0_values, [m_tilde, b_tilde, k_tilde], 'LineWidth', 1);
+
+    legend({'$|\tilde{m}|$', '$|\tilde{b}|$', '$|\tilde{k}|$'}, 'Interpreter', 'latex');
+    xlabel('$\eta_0$', 'Interpreter', 'latex');
+    title(sprintf('Lyapunov (%s): Parameter estimation error vs Noise Amplitude', structures{i}));
+    filePath = fullfile(outputDir, sprintf('task1_estimation_parameter_error_vs_noise_amplitude_lyapunov_%s.pdf', structures{i}));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
 end
