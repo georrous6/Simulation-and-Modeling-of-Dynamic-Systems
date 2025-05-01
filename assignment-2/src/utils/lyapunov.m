@@ -1,4 +1,4 @@
-function [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, u, dt, structure, A_real, C)
+function [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, x_0, u, dt, structure, A_real, C)
 
     N = size(x, 1);
     m_hat = NaN(N, 1);
@@ -10,7 +10,7 @@ function [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, u, dt,
     % Initial parameter guesses
     A_hat = [0, 1; -k_0 / m_0, -b_0 / m_0];
     B_hat = [0; 1 / m_0];
-    x_hat = x(1,:)';  % initialize state estimate
+    x_hat = x_0;  % initialize state estimate
 
     if strcmp(structure, 'parallel')
         for i = 1:N

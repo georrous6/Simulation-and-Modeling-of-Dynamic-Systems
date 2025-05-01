@@ -84,15 +84,17 @@ for i = 1:length(inputs)
 end
 
 %% Estimate parameters using Lyapunov (parallel and mixed) method
+
 u = inputs{2};
 odefun = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u(t));
 [~, x] = ode45(odefun, t, x0);
 structures = {'parallel', 'mixed'};
 A_real = [0, 1; -k/m, -b/m];
-C = [1, 0; 0, 1];
+C = 100 * eye(2);
+x_0 = [0; 0];
 
 for i = 1:length(structures)
-    [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, u(t), dt, structures{i}, A_real, C);
+    [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
 
     figure;
     hold on; grid on;
@@ -120,5 +122,29 @@ for i = 1:length(structures)
     xlabel('t');
     title(sprintf('Lyapunov (%s): Identification error for u(t)=%s', structures{i}, labels{2}));
     filePath = fullfile(outputDir, sprintf('task1_identification_error_lyapunov_%s.pdf', structures{i}));
+    exportgraphics(gcf, filePath, 'ContentType', 'vector');
+end
+
+%% Estimate parameters using Lyapunov (parallel and mixed) method with noise
+
+eta0 = 0.25;
+f0 = 20;
+eta = eta0 * sin(2 * pi * f0 * t);
+x_noise = [eta + x(:,1), x(:,2)];
+
+for i = 1:length(structures)
+
+    [m_hat, b_hat, k_hat] = lyapunov(x, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+    [m_hat_noise, b_hat_noise, k_hat_noise] = lyapunov(x_noise, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+
+    figure;
+    hold on; grid on;
+    plot(t, abs([m_hat - m, b_hat - b, k_hat - k]), 'LineWidth', 1);
+    plot(t, abs([m_hat_noise - m, b_hat_noise - b, k_hat_noise - k]), 'LineWidth', 1);
+
+    legend({'$|\tilde{m}|$', '$|\tilde{b}|$', '$|\tilde{k}|$', '$|\tilde{m}|$ noise', '$|\tilde{b}|$ noise', '$|\tilde{k}|$ noise'}, 'Interpreter', 'latex');
+    xlabel('t');
+    title(sprintf('Lyapunov (%s): Parameter estimation error for u(t)=%s', structures{i}, labels{2}));
+    filePath = fullfile(outputDir, sprintf('task1_parameter_estimation_error_lyapunov_%s.pdf', structures{i}));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
 end
