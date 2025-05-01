@@ -270,58 +270,58 @@ $\hat{x}(t) = \hat{\theta}(t) u(t)$ θα συγκλίνει ασυμπτωτικ
 $x(t) = \theta^{\star}u(t)$, και ο ρυθμός μεταβολής των παραμέτρων $\dot{\hat{\theta}}(t)$ θα μειώνεται με τον
 χρόνο και θα συγκλίνει ασυμπτωτικά στο μηδέν.
 
-Στο Σχήμα~\ref{fig:identification_error} φαίνεται το σφάλμα αναγνώρισης $e(t)$, η πραγματική έξοδος του 
-συστήματος $x(t)$ και η εκτίμησή της $\hat{x}(t)$, για $u(t) = 2.5$ με $\gamma = 10^{-5}$ (αριστερά) και για 
-$u(t) = 2.5 \sin t$ με $\gamma = 10^{-3}$ (δεξιά). Παρατηρούμε ότι και στις δύο περιπτώσεις το σφάλμα 
-μηδενίζεται μέσα σε εύλογο χρονικό διάστημα. Όπως έχει ήδη εξηγηθεί, η σύγκλιση του $\hat{x}(t)$ στο 
-$x(t)$ είναι εγγυημένη, καθώς και στις δύο περιπτώσεις ισχύει $u, \, \dot{u} \in L_{\infty}$, άρα 
-$\phi, \, \dot{\phi} \in L_{\infty}$.
+Στο Σχήμα~\ref{fig:task1_identification_error_gradient_descend} φαίνεται το σφάλμα αναγνώρισης $e(t)$, η 
+πραγματική έξοδος του συστήματος $x(t)$ και η εκτίμησή της $\hat{x}(t)$, για $u(t) = 2.5$ με 
+$\gamma = 10^{-5}$ (αριστερά) και για $u(t) = 2.5 \sin t$ με $\gamma = 10^{-3}$ (δεξιά). Παρατηρούμε ότι και 
+στις δύο περιπτώσεις το σφάλμα μηδενίζεται μέσα σε εύλογο χρονικό διάστημα. Όπως έχει ήδη εξηγηθεί, η σύγκλιση
+του $\hat{x}(t)$ στο $x(t)$ είναι εγγυημένη, καθώς και στις δύο περιπτώσεις ισχύει 
+$u, \, \dot{u} \in L_{\infty}$, άρα $\phi, \, \dot{\phi} \in L_{\infty}$.
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/identification_error_1.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_identification_error_gradient_descend_1.pdf}
         \caption{}
-        \label{fig:identification_error_1}
+        \label{fig:task1_identification_error_gradient_descend_1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/identification_error_2.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_identification_error_gradient_descend_2.pdf}
         \caption{}
-        \label{fig:identification_error_2}
+        \label{fig:task1_identification_error_gradient_descend_2}
     \end{subfigure}
     \caption{Σφάλμα αναγνώρισης για α) $u(t) = 2.5$ και β) $u(t) = 2.5 \sin t$}
-    \label{fig:identification_error}
+    \label{fig:task1_identification_error_gradient_descend}
 \end{figure}
 
-Στο Σχήμα~\ref{fig:parameter_estimations} φαίνονται οι εκτιμήσεις των παραμέτρων για $u(t) = 2.5$ με 
-$\gamma = 10^{-5}$ (αριστερά) και για $u(t) = 2.5 \sin t$ με $\gamma = 10^{-3}$ (δεξιά). Παρατηρούμε ότι και
-στις δύο περιπτώσεις ο ρυθμός μεταβολής των παραμέτρων $\dot{\hat{\theta}}(t)$ μειώνεται με τον χρόνο, όπως 
-άλλωστε αναμέναμε από το λήμμα \selectlanguage{english}Barbalat\selectlanguage{greek}. Επίσης, διαπιστώνουμε 
-ότι για $u(t) = 2.5$ οι εκτιμήσεις των $m$ και $k$ απέχουν από τις πραγματικές τιμές τους κατά κάποια σταθερή 
-ποσότητα. Αυτό μας προϊδεάζει ότι, ίσως σε αυτή την περίπτωση, το $\phi(t)$ δεν ικανοποιεί τη ΣΕΔ. Αντιθέτως,
-για $u(t) = 2.5 \sin t$, οι εκτιμήσεις των παραμέτρων τείνουν ασυμπτωτικά να γίνουν ίσες με τις πραγματικές 
-τιμές, κάτι που αποτελεί ένδειξη ότι το $\phi(t)$ ικανοποιεί τη ΣΕΔ.
+Στο Σχήμα~\ref{fig:task1_parameter_estimations_gradient_descend} φαίνονται οι εκτιμήσεις των παραμέτρων για
+$u(t) = 2.5$ με $\gamma = 10^{-5}$ (αριστερά) και για $u(t) = 2.5 \sin t$ με $\gamma = 10^{-3}$ (δεξιά). 
+Παρατηρούμε ότι και στις δύο περιπτώσεις ο ρυθμός μεταβολής των παραμέτρων $\dot{\hat{\theta}}(t)$ μειώνεται με
+τον χρόνο, όπως άλλωστε αναμέναμε από το λήμμα \selectlanguage{english}Barbalat\selectlanguage{greek}. Επίσης,
+διαπιστώνουμε ότι για $u(t) = 2.5$ οι εκτιμήσεις των $m$ και $k$ απέχουν από τις πραγματικές τιμές τους κατά 
+κάποια σταθερή ποσότητα. Αυτό μας προϊδεάζει ότι, ίσως σε αυτή την περίπτωση, το $\phi(t)$ δεν ικανοποιεί τη
+ΣΕΔ. Αντιθέτως, για $u(t) = 2.5 \sin t$, οι εκτιμήσεις των παραμέτρων τείνουν ασυμπτωτικά να γίνουν ίσες με τις
+πραγματικές τιμές, κάτι που αποτελεί ένδειξη ότι το $\phi(t)$ ικανοποιεί τη ΣΕΔ.
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/parameter_estimations_1.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_parameter_estimations_gradient_descend_1.pdf}
         \caption{}
-        \label{fig:parameter_estimations_1}
+        \label{fig:task1_parameter_estimations_gradient_descend_1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/parameter_estimations_2.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_parameter_estimations_gradient_descend_2.pdf}
         \caption{}
-        \label{fig:parameter_estimations_2}
+        \label{fig:task1_parameter_estimations_gradient_descend_2}
     \end{subfigure}
     \caption{Εκτιμήσεις παραμέτρων για α) $u(t) = 2.5$ και β) $u(t) = 2.5 \sin t$}
-    \label{fig:parameter_estimations}
+    \label{fig:task1_parameter_estimations_gradient_descend}
 \end{figure}
 
 Θα εξετάσουμε αν το διάνυσμα $\phi(t)$ ικανοποιεί τη ΣΕΔ για τις δύο περιπτώσεις εισόδου. Λέμε ότι το διάνυσμα 
@@ -338,15 +338,15 @@ $\phi(t)$ ικανοποιεί τη Συνθήκη Εναπομείνουσας 
 έλεγχο ικανοποίησης της (\ref{eq:PE}), γνωρίζοντας την είσοδο $u(t)$. Πρέπει δηλαδή εκ του αποτελέσματος να 
 διαπιστώσουμε την ικανοποίηση της συνθήκης αυτής, άρα και τη σύγκλιση του $\hat{\theta}$ στο $\theta^{\star}$.
 
-Στο Σχήμα~\ref{fig:PE_eigenvalues_1} φαίνονται οι ιδιοτιμές του πίνακα 
+Στο Σχήμα~\ref{fig:task1_PE_eigenvalues_1} φαίνονται οι ιδιοτιμές του πίνακα 
 $\int_{t}^{t+T_0} \phi(\tau) \phi^T(\tau) d\tau$ για $u(t) = 2.5$. Βλέπουμε ότι μία εκ των τριών ιδιοτιμών δεν
 έχει άνω φράγμα, άρα η ΣΕΔ δεν ικανοποιείται, κάτι που συμφωνεί με τις παρατηρήσεις μας για το 
-Σχήμα~\ref{fig:parameter_estimations_1}.
+Σχήμα~\ref{fig:task1_parameter_estimations_gradient_descend_1}.
 
-Στο Σχήμα~\ref{fig:PE_eigenvalues_2} φαίνονται οι ιδιοτιμές του πίνακα 
+Στο Σχήμα~\ref{fig:task1_PE_eigenvalues_2} φαίνονται οι ιδιοτιμές του πίνακα 
 $\int_{t}^{t+T_0} \phi(t) \phi(t)^T dt$ για $u(t) = 2.5 \sin t$. Σε αυτή την περίπτωση, βλέπουμε ότι όλες οι 
 ιδιοτιμές είναι φραγμένες $\forall t \ge 0$, άρα ικανοποιείται η ΣΕΔ, κάτι που συμφωνεί με τα σχόλιά μας 
-για το Σχήμα~\ref{fig:parameter_estimations_2}. 
+για το Σχήμα~\ref{fig:task1_parameter_estimations_gradient_descend_2}. 
 
 Βλέπουμε επομένως ότι η ενέργεια του σήματος εισόδου $u(t) = 2.5 \sin t$ είναι τέτοια που να ενεργοποιεί με 
 επειμένοντα τρόπο το σύστημα ώστε να μπορέσει να εμφανίσει την κρυμμένη πληροφορία $\theta^{\star}$.
@@ -355,20 +355,20 @@ $\int_{t}^{t+T_0} \phi(t) \phi(t)^T dt$ για $u(t) = 2.5 \sin t$. Σε αυτ�
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/PE_eigenvalues_1.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_PE_eigenvalues_1.pdf}
         \caption{}
-        \label{fig:PE_eigenvalues_1}
+        \label{fig:task1_PE_eigenvalues_1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/PE_eigenvalues_2.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_PE_eigenvalues_2.pdf}
         \caption{}
-        \label{fig:PE_eigenvalues_2}
+        \label{fig:task1_PE_eigenvalues_2}
     \end{subfigure}
     \caption{Ιδιοτιμές πίνακα $\int_{t}^{t+T_0} \phi(\tau) \phi^T(\tau) d\tau$ για 
     α) $u(t) = 2.5$ και β) $u(t) = 2.5 \sin t$}
-    \label{fig:PE_eigenvalues}
+    \label{fig:task1_PE_eigenvalues}
 \end{figure}
 
 Στην (\ref{eq:gradient_descend}), η επιλογή του $\gamma$ έγινε με τη μέθοδο \selectlanguage{english}trial and 
@@ -384,9 +384,11 @@ $\hat{\dot{x}}(t) = \hat{\theta}(t)\phi(t)$ και το σφάλμα αναγν�
 Επομένως, σε αυτή την περίπτωση, η μέθοδος μέγιστης καθόδου θα μας έδινε την εκτίμηση $\hat{\theta}$ για την 
 οποία η απόκλιση του $\hat{\dot{x}}$ από το $\dot{x}$ θα ήταν ελάχιστη.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection*{Μέθοδος \selectlanguage{english}Lyapunov\selectlanguage{greek}}
 Θα εκτιμήσουμε τις παραμέτρους $m$, $b$, $k$ με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}
-παράλληλης (Π) και μικτής (Μ) δομής, θεωρώντας αυτή τη φορά μόνο την είσοδο $u(t) = 2.5 \sin t$.
+παράλληλης (Π) και μικτής (Μ) δομής, θεωρώντας ως είσοδο την $u(t) = 2.5 \sin t$.
 
 Όπως ήδη έχουμε αναφέρει, το σύστημά μας μπορεί να γραφεί στην μορφή:
 \begin{equation*}
@@ -395,7 +397,7 @@ $\hat{\dot{x}}(t) = \hat{\theta}(t)\phi(t)$ και το σφάλμα αναγν�
 όπου οι πίνακες $A, \, B$ δίνονται από την (\ref{eq:state_space_matrices}) και $x$ το διάνυσμα καταστάσεων.
 Προφανώς, ο πίνακας $A$ είναι αρνητικά ημιορισμένος καθώς οι ιδιοτιμές του βρίσκονται στο αρνητικό ημιεπίπεδο.
 
-Θα μελετήσουμε πρώτα την (Π) δομή. Το σύστημα αναγνώρισης είναι:
+Θα μελετήσουμε πρώτα την Π δομή. Το σύστημα αναγνώρισης είναι:
 \begin{equation}
     \dot{\hat{x}} = \hat{A}\hat{x} + \hat{B} u,
     \label{eq:lyapunov_parallel_identification_system}
@@ -441,27 +443,34 @@ $\hat{\dot{x}}(t) = \hat{\theta}(t)\phi(t)$ και το σφάλμα αναγν�
     \label{eq:lyapunov_parallel_update_formula}
 \end{equation}
 η (\ref{eq:lyapunov_parallel_function_derivative_1}) γίνεται:
-\begin{equation*}
+\begin{equation}
     \dot{V} = e^TAe
-\end{equation*}
+    \label{eq:lyapunov_parallel_function_derivative_2}
+\end{equation}
 Παρατηρούμε ότι η (\ref{eq:lyapunov_parallel_update_formula}) είναι υλοποιήσιμη καθώς τα $e$, $u$ είναι 
-μετρίσιμα. Επίσης για να είναι το σύστημα (\ref{eq:lyapunov_parallel_identification_system}),
+μετρίσιμα. Επιπλέον, για να είναι το σύστημα (\ref{eq:lyapunov_parallel_identification_system}),
 (\ref{eq:lyapunov_parallel_update_formula}) ευσταθές πρέπει $\dot{V} = e^TAe \leq 0,\, \forall t$. Για να 
-ισχύει αυτό για κάθε $e$ θα πρέπει ο πίνακας $A$ εκτος από αρνητικά ημιορισμένος να είναι και συμμετρικός,
-κάτι το οποίο στην περίπτωσή μας δεν ισχύει. Επομένως δεν μπορούμμε να εγγυηθούμε ότι 
+ισχύει αυτό για κάθε $e$ θα πρέπει ο πίνακας $A$ εκτός από αρνητικά ημιορισμένος να είναι και συμμετρικός,
+κάτι το οποίο στην περίπτωσή μας δεν ισχύει. Επομένως δεν μπορούμε να εγγυηθούμε ότι 
 $\lim_{t \to \infty}e(t) = 0$.
 
-Στο Σχήμα~\ref{} φαίνεται η παράγωγος της συνάρτησης \selectlanguage{english}Lyapunov\selectlanguage{greek}. 
-Διαπιστώνουμε ότι δεν ισχύει $\dot{V} \leq 0, \, \forall t$ επαληθεύοντας την θεωρητική μας ανάλυση.
+Στο Σχήμα~\ref{fig:task1_lyapunov_derivative_function_parallel} φαίνεται η παράγωγος της συνάρτησης 
+\selectlanguage{english}Lyapunov\selectlanguage{greek}. Διαπιστώνουμε ότι δεν ισχύει 
+$\dot{V} \leq 0, \, \forall t$ επαληθεύοντας την θεωρητική μας ανάλυση.
+Στο Σχήμα~\ref{fig:task1_identification_error_lyapunov_parallel} βλέπουμε ότι το σφάλμα αναγνώρισης
+δεν συγκλίνει στο μηδέν. Αυτό δικαιολογείται από το γεγονός ότι η παράγωγος της συνάρτησης 
+\selectlanguage{english}Lyapunov\selectlanguage{greek} παίρνει και θετικές τιμές, καθιστώντας το σύστημα
+αναγνώρισης ασταθές.
+Στο Σχήμα~\ref{fig:task1_parameter_estimations_lyapunov_parallel} φαίνονται οι εκτιμήσεις των παραμέτρων
+για την Π δομή. Παρατηρούμε ότι οι εκτιμήσεις αποκλίνουν όταν η παράγωγος της συνάρτησης
+\selectlanguage{english}Lyapunov\selectlanguage{greek} γίνεται θετική.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Για την (Μ) δομή εργαζόμαστε αντίστοιχα. Το σύστημα αναγνώρισης είναι:
+Για την Μ δομή εργαζόμαστε αντίστοιχα. Το σύστημα αναγνώρισης είναι:
 \begin{equation}
     \dot{\hat{x}} = \hat{A}x + \hat{B} u + C(x - \hat{x}),
     \label{eq:lyapunov_mixed_identification_system}
 \end{equation}
-όπου $C$ συμμετρικός και θετικά ορισμένος πίνακας. Η παράγωγος του σφάλματος αναγνώρισης $e = x - \hat{x}$ 
+όπου $C$ συμμετρικός και θετικά ημιορισμένος πίνακας. Η παράγωγος του σφάλματος αναγνώρισης $e = x - \hat{x}$ 
 βρίσκεται:
 \begin{equation}
     \dot{e} = -\tilde{A}x - \tilde{B}u - Ce
@@ -473,7 +482,7 @@ $\lim_{t \to \infty}e(t) = 0$.
 \begin{equation}
     \dot{V} = -e^TCe + \mathrm{Tr}\{\tilde{A}\dot{\hat{A}} + \tilde{B}\dot{\hat{B}} - 
     \tilde{A}xe^T - \tilde{B}ue^T\}.
-    \label{eq:lyapunov_mixed_function_derivative}  
+    \label{eq:lyapunov_mixed_function_derivative_1}  
 \end{equation}
 Επιλέγουμε τώρα:
 \begin{equation}
@@ -481,11 +490,170 @@ $\lim_{t \to \infty}e(t) = 0$.
         \dot{\hat{A}} = xe^T \\ 
         \dot{\hat{B}} = ue^T
     \end{aligned}
-    \label{eq:lyapunov_parallel_update_formula}
+    \label{eq:lyapunov_mixed_update_formula}
 \end{equation}
-και η (\ref{eq:lyapunov_mixed_function_derivative}) γίνεται:
+και η (\ref{eq:lyapunov_mixed_function_derivative_1}) γίνεται:
 \begin{equation}
     \dot{V} = -e^TCe
+    \label{eq:lyapunov_mixed_function_derivative_2}
 \end{equation}
+Βλέπουμε ότι στην μεικτή δομή ισχύει $\dot{V} \leq 0, \, \forall t$, αφού ο $C$ είναι συμμετρικός και θετικά
+ημιορισμένος, άρα το σύστημα (\ref{eq:lyapunov_mixed_identification_system}), 
+(\ref{eq:lyapunov_mixed_update_formula}) είναι ευσταθές. 
+
+Συνεπώς, η εκ των προτέρων γνώση της ευστάθειας του συστήματος εκτίμησης στην Π δομή είναι πρακτικά αδύνατη
+καθώς δεν γνωρίζουμε τον πίνακα $A$ σε αντίθεση με την Μ δομή όπου μπορούμε να την εγγυηθούμε με κατάλληλη 
+επιλογή του πίνακα $C$.
+
+Στην ανάλυσή μας θέσαμε $C = \psi I$ όπου $I$ ο μοναδιαίος πίνακας και $\psi > 0$ το κέρδος. 
+Η επιλογή του $\psi$ έγινε και πάλι με την τεχνική 
+\selectlanguage{english}trial and error\selectlanguage{greek}. Μεγαλύτερες τιμές του $\psi$ έχουν ως 
+αποτέλεσμα ο διορθωτικός όρος $C(x - \hat{x})$ στην (\ref{eq:lyapunov_mixed_identification_system}) να 
+υπερισχύει, οδηγώντας σε ταχύτερη σύγκλιση. Ωστόσο, πολύ μεγάλες τιμές του $\psi$ μπορεί να καταστήσουν 
+το σύστημά μας άκαμπτο. Τελικά επιλέγουμε $\psi = 100$.
+
+Στο Σχήμα~\ref{fig:task1_lyapunov_derivative_function_mixed} φαίνεται η παράγωγος της συνάρτησης 
+\selectlanguage{english}Lyapunov\selectlanguage{greek}. Πράγματι ισχύει 
+$\dot{V} \leq 0, \, \forall t$ καθιστώντας το σύστημα αναγνώρισης ευσταθές.
+Στο Σχήμα~\ref{fig:task1_identification_error_lyapunov_mixed} βλέπουμε ότι το σφάλμα αναγνώρισης
+συγκλίνει και μάλιστα πολύ γρήγορα στο μηδέν λόγω της μεγάλης τιμής του κέρδους $\psi$ που επιλέξαμε.
+Στο Σχήμα~\ref{fig:task1_parameter_estimations_lyapunov_mixed} φαίνονται οι εκτιμήσεις των παραμέτρων
+για την Π δομή. Παρατηρούμε ότι οι εκτιμήσεις συγκλίνουν προς μία σταθερή τιμή η οποία ωστόσο διαφέρει
+από την πραγματική. Αυτό δικαιολογείται από το γεγονός ότι η είσοδος $u(t) = 2.5 \sin t$ δεν ικανοποιεί την
+ΣΕΔ. 
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_lyapunov_derivative_function_parallel.pdf}
+        \caption{}
+        \label{fig:task1_lyapunov_derivative_function_parallel}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_lyapunov_derivative_function_mixed.pdf}
+        \caption{}
+        \label{fig:task1_lyapunov_derivative_function_mixed}
+    \end{subfigure}
+    \caption{Παράγωγος συνάρτησης \selectlanguage{english}Lyapunov\selectlanguage{greek} για 
+    α) παράλληλη δομή β) μεικτή δομή}
+    \label{fig:task1_lyapunov_derivative_function}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_identification_error_lyapunov_parallel.pdf}
+        \caption{}
+        \label{fig:task1_identification_error_lyapunov_parallel}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_identification_error_lyapunov_mixed.pdf}
+        \caption{}
+        \label{fig:task1_identification_error_lyapunov_mixed}
+    \end{subfigure}
+    \caption{Σφάλμα αναγνώρισης της μεθόδου \selectlanguage{english}Lyapunov\selectlanguage{greek} για 
+    α) παράλληλη δομή β) μεικτή δομή}
+    \label{fig:task1_identification_error_lyapunov}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_parameter_estimations_lyapunov_parallel.pdf}
+        \caption{}
+        \label{fig:task1_parameter_estimations_lyapunov_parallel}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_parameter_estimations_lyapunov_mixed.pdf}
+        \caption{}
+        \label{fig:task1_parameter_estimations_lyapunov_mixed}
+    \end{subfigure}
+    \caption{Εκτιμήσεις παραμέτρων της μεθόδου \selectlanguage{english}Lyapunov\selectlanguage{greek} για 
+    α) παράλληλη δομή β) μεικτή δομή}
+    \label{fig:task1_parameter_estimations_lyapunov}
+\end{figure}
+
+
+\subsection*{Μέθοδος \selectlanguage{english}Lyapunov\selectlanguage{greek} και θόρυβος δειγματολειψίας}
+
+Θεωρούμε ότι η έξοδος $x(t)$ μετριέται με θόρυβο $\eta(t) = \eta_0 \sin(2\pi f_0 t), \forall t \geq 0$, 
+με $\eta_0 = 0.25$ και $f_0 = 20$. Θα μελετήσουμε την επίδραση του θορύβου στις εκτιμήσεις των παραμέτρων
+και της εξόδου για την μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek} με παράλληλη και μεικτή
+δομή.
+
+Στο Σχήμα~\ref{fig:task1_identification_error_lyapunov_parallel_noise} φαίνεται η απόλυτη τιμή του σφάλματος 
+αναγνώρισης όταν προστείθεται και όταν δεν προστίθεται θόρυβος στην έξοδο για την Π δομή. Βλέπουμε ότι η 
+προσθήκη θορύβου έχει αμελητέα επίδραση στο σφάλμα αναγνώρισης. Αντιθέτως, στο 
+Σχήμα~\ref{fig:task1_identification_error_lyapunov_mixed_noise} βλέπουμε ότι στην Μ δομή η προσθήκη θορύβου
+έχει σημαντική επίδραση στο σφάλμα αναγνώρισης. Αυτό μπορεί να αιτιολογηθεί ως εξής. Από τις
+(\ref{eq:lyapunov_parallel_update_formula}), (\ref{eq:lyapunov_mixed_update_formula}) έχουμε:
+\begin{equation*}
+    \begin{aligned}
+        \dot{\hat{A}} = \hat{x}e^T = \hat{x}(x^T - \hat{x}^T) \quad \text{Π δομή} \\
+        \dot{\hat{A}} = xe^T = x(x^T - \hat{x}^T) \quad \text{Μ δομή}
+    \end{aligned}
+\end{equation*}
+Αν στην παραπάνω σχέση μία από τις μεταβλητές κατάστασης του πραγματικού συστήματος διαβρωθεί με προσθετικό
+θόρυβο $\eta(t)$ θα παρατηρήσουμε ότι στην Μ δομή η εκτίμηση $\hat{A}$ θα εξαρτάται τόσο από το $\eta^2(t)$
+όσο και από το $\eta(t)$. Αντίθετα, στην Π δομή μόνο από το $\eta(t)$. Συνεπώς, η Μ δομή είναι πιο ευαίσθητη
+στην παρουσία θορύβου σε σχέση με την Π δομή.
+
+Στο Σχήμα~\ref{fig:task1_estimation_parameter_error_vs_noise_amplitude_lyapunov} φαίνεται το σφάλμα εκτίμησης
+των παραμέτρων συναρτήσει του πλάτους του θορύβου για την παράλληλη (αριστερά) και την μεικτή (δεξιά) δομή.
+Βλέπουμε ότι στην παράλληλη δομή το σφάλμα εκτίμησης δεν εξαρτάται από το πλάτος του θορύβου ενώ στην μεικτή 
+δομή μεταβάλλεται και μάλιστα έχει την τάση να αυξάνεται με την αύξηση του πλάτους του θορύβου.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_identification_error_lyapunov_parallel_noise.pdf}
+        \caption{}
+        \label{fig:task1_identification_error_lyapunov_parallel_noise}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{plot/task1_identification_error_lyapunov_mixed_noise.pdf}
+        \caption{}
+        \label{fig:task1_identification_error_lyapunov_mixed_noise}
+    \end{subfigure}
+    \caption{Σφάλμα εκτίμησης με και χωρίς θόρυβο εξόδου για την μέθοδο
+    \selectlanguage{english}Lyapunov\selectlanguage{greek} με 
+    α) παράλληλη δομή β) μεικτή δομή}
+    \label{fig:task1_identification_error_lyapunov_noise}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{
+        plot/task1_estimation_parameter_error_vs_noise_amplitude_lyapunov_parallel.pdf}
+        \caption{}
+        \label{fig:task1_estimation_parameter_error_vs_noise_amplitude_lyapunov_parallel}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{
+        plot/task1_estimation_parameter_error_vs_noise_amplitude_lyapunov_mixed.pdf}
+        \caption{}
+        \label{fig:task1_estimation_parameter_error_vs_noise_amplitude_lyapunov_mixed}
+    \end{subfigure}
+    \caption{Σφάλματα εκτίμησης παραμέτρων συναρτήσει του πλάτους του θορύβου για την μέθοδο
+    \selectlanguage{english}Lyapunov\selectlanguage{greek} με 
+    α) παράλληλη δομή β) μεικτή δομή}
+    \label{fig:task1_estimation_parameter_error_vs_noise_amplitude_lyapunov}
+\end{figure}
 
 \end{document}
