@@ -87,17 +87,19 @@ end
 u = inputs{2};
 odefun = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u(t));
 [~, x] = ode45(odefun, t, x0);
-types = {'parallel'};
+structures = {'parallel', 'mixed'};
+A_real = [0, 1; -k/m, -b/m];
+C = [1, 0; 0, 1];
 
-for i = 1:length(types)
-    [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, u(t), dt, types{i}, m, b, k);
+for i = 1:length(structures)
+    [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, u(t), dt, structures{i}, A_real, C);
 
     figure;
     hold on; grid on;
     plot(t, V_dot, 'LineWidth', 1);
     xlabel('t');
-    title('Lyapunov derivative function');
-    filePath = fullfile(outputDir, sprintf('task1_lyapunov_derivative_function_%s.pdf', types{i}));
+    title(sprintf('Lyapunov (%s) derivative function', structures{i}));
+    filePath = fullfile(outputDir, sprintf('task1_lyapunov_derivative_function_%s.pdf', structures{i}));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
 
     figure;
@@ -106,8 +108,8 @@ for i = 1:length(types)
     plot(t, repmat([m, b, k], N, 1), '--r', 'LineWidth', 1);
     legend({'$\hat{m}$', '$\hat{b}$', '$\hat{k}$'}, 'Interpreter', 'latex');
     xlabel('t');
-    title(sprintf('Lyapunov (%s): Parameter estimations for u(t)=%s', types{i}, labels{2}));
-    filePath = fullfile(outputDir, sprintf('task1_parameter_estimations_lyapunov_%s.pdf', types{i}));
+    title(sprintf('Lyapunov (%s): Parameter estimations for u(t)=%s', structures{i}, labels{2}));
+    filePath = fullfile(outputDir, sprintf('task1_parameter_estimations_lyapunov_%s.pdf', structures{i}));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
     
     e = x(:,1) - y_hat;
@@ -116,7 +118,7 @@ for i = 1:length(types)
     plot(t, [x(:,1), y_hat, e], 'LineWidth', 1);
     legend({'$x$', '$\hat{x}$', 'e'}, 'Interpreter', 'latex');
     xlabel('t');
-    title(sprintf('Lyapunov (%s): Identification error for u(t)=%s', types{i}, labels{2}));
-    filePath = fullfile(outputDir, sprintf('task1_identification_error_lyapunov_%s.pdf', types{i}));
+    title(sprintf('Lyapunov (%s): Identification error for u(t)=%s', structures{i}, labels{2}));
+    filePath = fullfile(outputDir, sprintf('task1_identification_error_lyapunov_%s.pdf', structures{i}));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
 end
