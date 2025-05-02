@@ -669,4 +669,83 @@ $\eta(t)$. Αντίθετα, στη Π δομή η εξάρτηση εμφανί
 
 \section*{Θέμα 2}
 
+Το μη-γραμμικό σύστημα που περιγράφει τη γωνία κύλισης 
+\selectlanguage{english}(roll angle)\selectlanguage{greek} ενός αεροσκάφους δίνεται από τη διαφορική εξίσωση:
+\begin{equation*}
+    \ddot{r}(t) = -a_1 \dot{r}(t) - a_2 \sin(r(t)) + a_3 \dot{r}^2(t) \sin(2r(t)) + b u(t) + d(t)
+\end{equation*}
+όπου $r(t)$ η γωνία κύλισης \selectlanguage{english}[rad]\selectlanguage{greek},
+$a_i, \, i = 1,\,2,\,3$ και $b$ σταθερές, άγνωστες παράμετροι, $u(t)$ η είσοδος ελέγχου και $d(t)$
+οι εξωτερικές διαταραχές.
+
+\subsection*{Σχεδίαση ελεγκτή ανάδρασης}
+
+Αρχικά θα σχεδιάσουμε ελεγκτή ανάδρασης ώστε η γωνία $r(t)$ να ακολουθήσει την επιθυμητή τροχιά $r_d(t)$, η
+οποία ορίζεται ώστε:
+\begin{equation}
+    r_d(t) = -\frac{\pi}{1000}t^2 + \frac{\pi}{50}t, \quad t \in [0,\,20].
+    \label{eq:desired_trajectory}
+\end{equation}
+Από την (\ref{eq:desired_trajectory}) μπορούμε να επαληθεύσουμε ότι 
+$r_d(0) = 0, \, r_d(10) = \pi / 10, \, r_d(20) = 0$.
+Ο ελεγκτής ανάδρασης που θα χρησιμοποιήσουμε είναι:
+\begin{equation*}
+    \begin{aligned}
+    z_1(t) &= \frac{r(t) - r_d(t)}{\phi(t)} \\
+    \alpha(t) &= -k_1 T(z_1(t)) \\
+    z_2(t) &= \frac{\dot{r}(t) - \alpha(t)}{\rho} \\
+    u(t) &= -k_2 T(z_2(t))
+    \end{aligned}
+\end{equation*}
+όπου $\phi(t) = (\phi_0 - \phi_\infty) e^{-\lambda t} + \phi_\infty$ η επιθυμητή ακρίβεια παρακολούθησης
+με παραμέτρους $\phi_0 > \phi_{\infty} > 0$, $\lambda > 0$, $\phi_0 \gg |r(0) - r_d(0)|$ και
+$T(z) = \ln\left( \frac{1+z}{1-z} \right)$. Επίσης $\rho \gg |\dot{r}(0) - \alpha(0)|$ και $k_1 > 0$, $k_2 > 0$
+κέρδη ελεύθερης επιλογής.
+
+Στο Σχήμα~\ref{fig:task2_roll_angle_response} φαίνεται το γράφημα γωνίας κύλισης $r(t)$ και τροχιάς αναφοράς
+$r_d(t)$ για $\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \,
+k_2 = 2$.
+
+Από το Σχήμα~\ref{fig:task2_position_tracking_accuracy} βλέπουμε ότι για την ακρίβεια παρακολούθησης
+της επιθυμητής τροχίας ισχύει $|r(t) - r_d(t)| < \phi(t), \, \forall t \geq 0$. Ομοίως από το 
+Σχήμα~\ref{fig:task2_velocity_tracking_accuracy} για την ακρίβεια παρακολούθησης της επιθυμητής ταχύτητας 
+ισχύει $|\dot{r}(t) - \alpha(t)| < \rho, \, \forall t \geq 0$. Συνεπώς η υλοποίησή μας είναι ορθή για αυτές
+τις επιλογές των παραμέτρων.
+
+Από το Σχήμα~\ref{fig:task2_position_tracking_accuracy_vs_phi_infty} παρατηρούμε ότι με τη μείωση του 
+$\phi_{\infty}$ βελτιώνεται η ακρίβεια παρακολούθησης της επιθυμητής τροχίας $r_d(t)$.
+
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_roll_angle_response.pdf}
+    \captionof{figure}{Γράφημα γωνίας κύλισης $r(t)$ και τροχιάς αναφοράς $r_d(t)$
+    ($\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \, k_2 = 2$)}
+    \label{fig:task2_roll_angle_response}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_position_tracking_accuracy_vs_phi_infty.pdf}
+    \captionof{figure}{Απόκλιση $|r(t) - r_d(t)|$ για διάφορες τιμές του 
+    $\phi_{\infty}$}
+    \label{fig:task2_position_tracking_accuracy_vs_phi_infty}
+\end{minipage}
+
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_position_tracking_accuracy.pdf}
+    \captionof{figure}{Απόκλιση $|r(t) - r_d(t)|$ 
+    ($\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \, k_2 = 2$)}
+    \label{fig:task2_position_tracking_accuracy}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_velocity_tracking_accuracy.pdf}
+    \captionof{figure}{Απόκλιση $|\dot{r}(t) - \alpha(t)|$ 
+    ($\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \, k_2 = 2$)}
+    \label{fig:task2_velocity_tracking_accuracy}
+\end{minipage}
+
+
 \end{document}
