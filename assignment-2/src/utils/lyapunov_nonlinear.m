@@ -1,4 +1,4 @@
-function dz = lyapunov_nonlinear(t, z, u, C, theta_star)
+function dz = lyapunov_nonlinear(t, z, u, C, theta_star, d)
     % Extract state
     x = z(1:2);
     hat_x = z(3:4);
@@ -15,7 +15,7 @@ function dz = lyapunov_nonlinear(t, z, u, C, theta_star)
          0, u(t, x)];
 
     % True system dynamics
-    dx = f * theta1_star + g * theta2_star;
+    dx = f * theta1_star + g * theta2_star + [0; 1] * d(t);
 
     % Estimated dynamics
     hat_dx = f * theta1_hat + g * theta2_hat + C * (x - hat_x);

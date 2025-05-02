@@ -21,8 +21,8 @@ function [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, x_0, u
             V_dot(i) = e' * A_real * e;
 
             % Update laws (Euler integration)
-            A_hat = A_hat + dt * (x_hat * e');
-            B_hat = B_hat + dt * (u(i) * e);
+            A_hat = A_hat + dt * (e * x_hat');
+            B_hat = B_hat + dt * (e * u(i)');
 
             % State estimate update
             x_hat = x_hat + dt * (A_hat * x_hat + B_hat * u(i));
@@ -48,8 +48,8 @@ function [m_hat, b_hat, k_hat, y_hat, V_dot] = lyapunov(x, m_0, b_0, k_0, x_0, u
             V_dot(i) = -e' * C * e;
 
             % Update laws (Euler integration)
-            A_hat = A_hat + dt * (x(i,:)' * e');
-            B_hat = B_hat + dt * (u(i) * e);
+            A_hat = A_hat + dt * (e * x(i,:));
+            B_hat = B_hat + dt * (e * u(i)');
 
             % State estimate update
             x_hat = x_hat + dt * (A_hat * x(i,:)' + B_hat * u(i) + C * e);

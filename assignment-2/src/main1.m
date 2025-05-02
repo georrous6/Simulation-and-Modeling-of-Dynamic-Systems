@@ -90,7 +90,7 @@ odefun = @(t, x) ([0, 1; -k/m, -b/m] * x(:) + [0; 1/m] * u(t));
 [~, x] = ode45(odefun, t, x0);
 structures = {'parallel', 'mixed'};
 A_real = [0, 1; -k/m, -b/m];
-C = 100 * eye(2);
+C = 2 * eye(2);
 x_0 = [0; 0];
 
 for i = 1:length(structures)
@@ -134,18 +134,31 @@ x_noise = [eta + x(:,1), x(:,2)];
 
 for i = 1:length(structures)
 
-    [m_hat, b_hat, k_hat, y_hat] = lyapunov(x, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
-    [m_hat_noise, b_hat_noise, k_hat_noise, y_hat_noise] = lyapunov(x_noise, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+    [m_hat, b_hat, k_hat] = lyapunov(x, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
+    [m_hat_noise, b_hat_noise, k_hat_noise] = lyapunov(x_noise, m_0, b_0, k_0, x_0, u(t), dt, structures{i}, A_real, C);
 
     figure;
-    hold on; grid on;
-    plot(t, abs(x(:,1) - y_hat), 'LineWidth', 1);
-    plot(t, abs(x(:,1) - y_hat_noise), 'LineWidth', 1);
+    sgtitle(sprintf('Lyapunov (%s): Parameters estimation error', structures{i}), 'Interpreter', 'latex');
 
+    subplot(3, 1, 1); grid on;
+    plot(t, abs([m - m_hat, m - m_hat_noise]), 'LineWidth', 1);
     legend({'without noise', 'with noise'}, 'Interpreter', 'latex');
-    xlabel('t'); ylabel('|e|');
-    title(sprintf('Lyapunov (%s): Identification error for u(t)=%s', structures{i}, labels{2}));
-    filePath = fullfile(outputDir, sprintf('task1_identification_error_lyapunov_%s_noise.pdf', structures{i}));
+    xlabel('t');
+    ylabel('$|m - \hat{m}|$', 'Interpreter', 'latex');
+
+    subplot(3, 1, 2); grid on;
+    plot(t, abs([b - b_hat, b - b_hat_noise]), 'LineWidth', 1);
+    legend({'without noise', 'with noise'}, 'Interpreter', 'latex');
+    xlabel('t');
+    ylabel('$|b - \hat{b}|$', 'Interpreter', 'latex');
+
+    subplot(3, 1, 3); grid on;
+    plot(t, abs([k - k_hat, k - k_hat_noise]), 'LineWidth', 1);
+    legend({'without noise', 'with noise'}, 'Interpreter', 'latex');
+    xlabel('t');
+    ylabel('$|k - \hat{k}|$', 'Interpreter', 'latex');
+    
+    filePath = fullfile(outputDir, sprintf('task1_parameter_estimation_error_lyapunov_%s_noise.pdf', structures{i}));
     exportgraphics(gcf, filePath, 'ContentType', 'vector');
 end
 
