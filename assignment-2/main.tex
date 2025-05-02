@@ -6,12 +6,13 @@
 \usepackage{tikz}
 \usepackage{pgf}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usetikzlibrary{arrows.meta}
 \usepackage[utf8]{inputenc}
 \usepackage[english,greek]{babel}
 \usepackage{hyperref}
 
-\title{Προσομοίωση και Μοντελοποίηση \newline Δυναμικών Συστημάτων \newline Εργασία 1}
+\title{Προσομοίωση και Μοντελοποίηση \newline Δυναμικών Συστημάτων \newline Εργασία 2}
 \author{Ρουσομάνης Γεώργιος (ΑΕΜ: 10703)}
 \date{Απρίλιος 2025}
 
@@ -430,15 +431,15 @@ $\hat{\dot{x}}(t) = \hat{\theta}(t)\phi(t)$ και το σφάλμα αναγν�
 χρόνο κατά μήκος της λύσης της (\ref{eq:lyapunov_parallel_identification_error_derivative_3}) βρίσκουμε έπειτα
 από πράξεις:
 \begin{equation}
-    \dot{V} = e^TAe + \mathrm{Tr}\{\tilde{A}\dot{\hat{A}} + \tilde{B}\dot{\hat{B}} - 
+    \dot{V} = e^TAe + \mathrm{Tr}\{\tilde{A}^T\dot{\hat{A}} + \tilde{B}^T\dot{\hat{B}} - 
     \tilde{A}\hat{x}e^T - \tilde{B}ue^T\}.
     \label{eq:lyapunov_parallel_function_derivative_1}
 \end{equation}
 Επιλέγοντας:
 \begin{equation}
     \begin{aligned}
-        \dot{\hat{A}} = \hat{x}e^T \\ 
-        \dot{\hat{B}} = ue^T
+        \dot{\hat{A}} = e \hat{x}^T \\ 
+        \dot{\hat{B}} = eu^T
     \end{aligned}
     \label{eq:lyapunov_parallel_update_formula}
 \end{equation}
@@ -459,13 +460,13 @@ $\lim_{t \to \infty} e(t) = 0$.
 $\dot{V} \leq 0, \, \forall t$, επαληθεύοντας τη θεωρητική μας ανάλυση.
 
 Στο Σχήμα~\ref{fig:task1_identification_error_lyapunov_parallel} παρατηρούμε ότι το σφάλμα αναγνώρισης
-δεν συγκλίνει στο μηδέν. Αυτό αιτιολογείται από το γεγονός ότι η παράγωγος της συνάρτησης 
+δεν συγκλίνει στο μηδέν αλλά ταλαντώνεται. Αυτό αιτιολογείται από το γεγονός ότι η παράγωγος της συνάρτησης 
 \selectlanguage{english}Lyapunov\selectlanguage{greek} λαμβάνει και θετικές τιμές, καθιστώντας το σύστημα
-αναγνώρισης ασταθές.
+εκτίμησης ασταθές.
 
 Στο Σχήμα~\ref{fig:task1_parameter_estimations_lyapunov_parallel} παρουσιάζονται οι εκτιμήσεις των παραμέτρων
-για τη Π δομή. Παρατηρούμε ότι οι εκτιμήσεις αποκλίνουν όταν η παράγωγος της συνάρτησης 
-\selectlanguage{english}Lyapunov\selectlanguage{greek} γίνεται θετική.
+για τη Π δομή. Παρατηρούμε ότι οι εκτιμήσεις δεν συγκλίνουν σε μία σταθερή τιμή αλλά ταλαντώνονται λόγω της
+αστάθειας του συστήματος εκτίμησης.
 
 Για τη Μ δομή εργαζόμαστε αντίστοιχα. Το σύστημα αναγνώρισης είναι:
 \begin{equation}
@@ -482,15 +483,15 @@ $\dot{V} \leq 0, \, \forall t$, επαληθεύοντας τη θεωρητικ
 (\ref{eq:lyapunov_function}). Παραγωγίζοντας την (\ref{eq:lyapunov_function}) και αντικαθιστώντας
 την (\ref{eq:lyapunov_mixed_identification_error_derivative}) προκύπτει:
 \begin{equation}
-    \dot{V} = -e^TCe + \mathrm{Tr}\{\tilde{A}\dot{\hat{A}} + \tilde{B}\dot{\hat{B}} - 
+    \dot{V} = -e^TCe + \mathrm{Tr}\{\tilde{A}^T\dot{\hat{A}} + \tilde{B}^T\dot{\hat{B}} - 
     \tilde{A}xe^T - \tilde{B}ue^T\}.
     \label{eq:lyapunov_mixed_function_derivative_1}  
 \end{equation}
 Επιλέγουμε τώρα:
 \begin{equation}
     \begin{aligned}
-        \dot{\hat{A}} = xe^T \\ 
-        \dot{\hat{B}} = ue^T
+        \dot{\hat{A}} = ex^T \\ 
+        \dot{\hat{B}} = eu^T
     \end{aligned}
     \label{eq:lyapunov_mixed_update_formula}
 \end{equation}
@@ -503,28 +504,23 @@ $\dot{V} \leq 0, \, \forall t$, επαληθεύοντας τη θεωρητικ
 ημιορισμένος. Συνεπώς, το σύστημα (\ref{eq:lyapunov_mixed_identification_system}), 
 (\ref{eq:lyapunov_mixed_update_formula}) είναι ευσταθές.
 
-Η εκ των προτέρων διασφάλιση της ευστάθειας του συστήματος εκτίμησης στη Π δομή είναι πρακτικά αδύνατη,
-καθώς ο πίνακας $A$ είναι άγνωστος. Αντίθετα, στη Μ δομή μπορούμε να εγγυηθούμε την ευστάθεια με κατάλληλη 
-επιλογή του πίνακα $C$.
-
 Στην ανάλυσή μας θέσαμε $C = \psi I$, όπου $I$ είναι ο μοναδιαίος πίνακας και $\psi > 0$ το κέρδος. 
 Η επιλογή του $\psi$ έγινε και πάλι με την τεχνική 
 \selectlanguage{english}trial and error\selectlanguage{greek}. Μεγαλύτερες τιμές του $\psi$ έχουν ως 
 αποτέλεσμα να υπερισχύει ο διορθωτικός όρος $C(x - \hat{x})$ στην 
 (\ref{eq:lyapunov_mixed_identification_system}), οδηγώντας σε ταχύτερη σύγκλιση. Ωστόσο, πολύ μεγάλες τιμές 
-του $\psi$ ενδέχεται να καταστήσουν το σύστημα άκαμπτο. Τελικά, επιλέγουμε $\psi = 100$.
+του $\psi$ ενδέχεται να καταστήσουν το σύστημα άκαμπτο. Τελικά, επιλέγουμε $\psi = 5$.
 
 Στο Σχήμα~\ref{fig:task1_lyapunov_derivative_function_mixed} φαίνεται η παράγωγος της συνάρτησης 
 \selectlanguage{english}Lyapunov\selectlanguage{greek}. Πράγματι, ισχύει 
-$\dot{V} \leq 0, \, \forall t$, καθιστώντας το σύστημα αναγνώρισης ευσταθές.
+$\dot{V} \leq 0, \, \forall t$, καθιστώντας το σύστημα εκτίμησης ευσταθές.
 
 Στο Σχήμα~\ref{fig:task1_identification_error_lyapunov_mixed} παρατηρούμε ότι το σφάλμα αναγνώρισης
 συγκλίνει, και μάλιστα πολύ γρήγορα, στο μηδέν, λόγω της μεγάλης τιμής του κέρδους $\psi$ που επιλέξαμε.
 
 Στο Σχήμα~\ref{fig:task1_parameter_estimations_lyapunov_mixed} παρουσιάζονται οι εκτιμήσεις των παραμέτρων
-για τη Π δομή. Παρατηρούμε ότι οι εκτιμήσεις συγκλίνουν προς μία σταθερή τιμή, η οποία ωστόσο διαφέρει
-από την πραγματική. Αυτό αιτιολογείται από το γεγονός ότι η είσοδος $u(t) = 2.5 \sin t$ δεν ικανοποιεί τη
-ΣΕΔ.
+για τη Π δομή. Παρατηρούμε ότι οι εκτιμήσεις συγκλίνουν προς μία σταθερή τιμή, η οποία μάλιστα ταυτίζεται με
+την πραγματική. Αυτό αιτιολογείται από το γεγονός ότι η είσοδος $u(t) = 2.5 \sin t$ ικανοποιεί τη ΣΕΔ.
 
 \begin{figure}[h!]
     \centering
@@ -594,28 +590,15 @@ $\dot{V} \leq 0, \, \forall t$, καθιστώντας το σύστημα αν�
 και της εξόδου για τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek} με παράλληλη και μικτή
 δομή.
 
-Στο Σχήμα~\ref{fig:task1_identification_error_lyapunov_parallel_noise} παρουσιάζεται η απόλυτη τιμή του 
-σφάλματος αναγνώρισης, με και χωρίς προσθήκη θορύβου στην έξοδο, για τη Π δομή. Παρατηρούμε ότι η προσθήκη
-θορύβου έχει αμελητέα επίδραση στο σφάλμα αναγνώρισης. Αντίθετα, στο 
-Σχήμα~\ref{fig:task1_identification_error_lyapunov_mixed_noise} παρατηρούμε ότι στη Μ δομή η προσθήκη θορύβου
-επηρεάζει σημαντικά το σφάλμα αναγνώρισης. Αυτό μπορεί να αιτιολογηθεί ως εξής. Από τις
-(\ref{eq:lyapunov_parallel_update_formula}), (\ref{eq:lyapunov_mixed_update_formula}) προκύπτει:
-
-\begin{equation*}
-    \begin{aligned}
-        \dot{\hat{A}} = \hat{x}e^T = \hat{x}(x^T - \hat{x}^T) \quad \text{Π δομή} \\
-        \dot{\hat{A}} = xe^T = x(x^T - \hat{x}^T) \quad \text{Μ δομή}
-    \end{aligned}
-\end{equation*}
-Αν στη σχέση αυτή μία από τις μεταβλητές κατάστασης του πραγματικού συστήματος διαβρωθεί με προσθετικό
-θόρυβο $\eta(t)$, τότε στη Μ δομή η εκτίμηση $\hat{A}$ θα εξαρτάται τόσο από το $\eta^2(t)$ όσο και από το 
-$\eta(t)$. Αντίθετα, στη Π δομή η εξάρτηση εμφανίζεται μόνο ως προς το $\eta(t)$. Συνεπώς, η Μ δομή είναι
-πιο ευαίσθητη στην παρουσία θορύβου σε σύγκριση με τη Π δομή.
+Στο Σχήμα~\ref{fig:task1_parameter_estimation_error_lyapunov_noise} παρουσιάζεται η απόλυτη τιμή του 
+σφάλματος εκτίμησης των παραμέτρων, με και χωρίς προσθήκη θορύβου στην έξοδο, για τη Π δομή (αριστερά) και την
+Μ δομή (δεξιά). Παρατηρούμε ότι η προσθήκη θορύβου έχει αμελητέα επίδραση στο σφάλμα και για τις δύο 
+περιπτώσεις. Αυτό ενδεχομένως να συμβαίνει λόγω του μικρού πλάτους του θορύβου $\eta_0$.
 
 Στο Σχήμα~\ref{fig:task1_estimation_parameter_error_vs_noise_amplitude_lyapunov} παρουσιάζεται το σφάλμα 
 εκτίμησης των παραμέτρων συναρτήσει του πλάτους του θορύβου, για την παράλληλη (αριστερά) και τη μικτή (δεξιά) 
-δομή. Παρατηρούμε ότι στην παράλληλη δομή το σφάλμα εκτίμησης παραμένει ουσιαστικά ανεξάρτητο από το πλάτος του
-θορύβου, ενώ στη μικτή δομή το σφάλμα αυξάνεται με την αύξηση του πλάτους του θορύβου. 
+δομή. Παρατηρούμε ότι στην παράλληλη δομή το σφάλμα εκτίμησης είναι ουσιαστικά ανεξάρτητο από το πλάτος του
+θορύβου, ενώ στη μικτή δομή το σφάλμα μεταβάλλεται με την αύξηση του πλάτους του θορύβου. 
 
 Η μειωμένη ευαισθησία στο πλάτος του θορύβου στη Π δομή μπορεί να αιτιολογηθεί παρατηρώντας το σύστημα 
 αναγνώρισης (\ref{eq:lyapunov_parallel_identification_system}), όπου διαπιστώνουμε ότι δεν 
@@ -627,21 +610,21 @@ $\eta(t)$. Αντίθετα, στη Π δομή η εξάρτηση εμφανί
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/task1_identification_error_lyapunov_parallel_noise.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_parameter_estimation_error_lyapunov_parallel_noise.pdf}
         \caption{}
-        \label{fig:task1_identification_error_lyapunov_parallel_noise}
+        \label{fig:task1_parameter_estimation_error_lyapunov_parallel_noise}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{plot/task1_identification_error_lyapunov_mixed_noise.pdf}
+        \includegraphics[width=\linewidth]{plot/task1_parameter_estimation_error_lyapunov_mixed_noise.pdf}
         \caption{}
-        \label{fig:task1_identification_error_lyapunov_mixed_noise}
+        \label{fig:task1_parameter_estimation_error_lyapunov_mixed_noise}
     \end{subfigure}
-    \caption{Σφάλμα εκτίμησης με και χωρίς θόρυβο εξόδου για την μέθοδο
+    \caption{Σφάλμα εκτίμησης παραμέτρων με και χωρίς θόρυβο εξόδου για την μέθοδο
     \selectlanguage{english}Lyapunov\selectlanguage{greek} με 
     α) παράλληλη δομή β) μεικτή δομή}
-    \label{fig:task1_identification_error_lyapunov_noise}
+    \label{fig:task1_parameter_estimation_error_lyapunov_noise}
 \end{figure}
 
 \begin{figure}[h!]
@@ -671,12 +654,13 @@ $\eta(t)$. Αντίθετα, στη Π δομή η εξάρτηση εμφανί
 
 Το μη-γραμμικό σύστημα που περιγράφει τη γωνία κύλισης 
 \selectlanguage{english}(roll angle)\selectlanguage{greek} ενός αεροσκάφους δίνεται από τη διαφορική εξίσωση:
-\begin{equation*}
+\begin{equation}
     \ddot{r}(t) = -a_1 \dot{r}(t) - a_2 \sin(r(t)) + a_3 \dot{r}^2(t) \sin(2r(t)) + b u(t) + d(t)
-\end{equation*}
+    \label{eq:roll_angle_system}
+\end{equation}
 όπου $r(t)$ η γωνία κύλισης \selectlanguage{english}[rad]\selectlanguage{greek},
 $a_i, \, i = 1,\,2,\,3$ και $b$ σταθερές, άγνωστες παράμετροι, $u(t)$ η είσοδος ελέγχου και $d(t)$
-οι εξωτερικές διαταραχές.
+οι εξωτερικές διαταραχές. Οι πραγματικές τιμές των παραμέτρων είναι $\alpha_1 = 1.315, \, \alpha_2 = 0.725, \, \alpha_3 = 0.225$ και $b = 1.175$.
 
 \subsection*{Σχεδίαση ελεγκτή ανάδρασης}
 
@@ -689,14 +673,15 @@ $a_i, \, i = 1,\,2,\,3$ και $b$ σταθερές, άγνωστες παράμ
 Από την (\ref{eq:desired_trajectory}) μπορούμε να επαληθεύσουμε ότι 
 $r_d(0) = 0, \, r_d(10) = \pi / 10, \, r_d(20) = 0$.
 Ο ελεγκτής ανάδρασης που θα χρησιμοποιήσουμε είναι:
-\begin{equation*}
+\begin{equation}
     \begin{aligned}
     z_1(t) &= \frac{r(t) - r_d(t)}{\phi(t)} \\
     \alpha(t) &= -k_1 T(z_1(t)) \\
     z_2(t) &= \frac{\dot{r}(t) - \alpha(t)}{\rho} \\
     u(t) &= -k_2 T(z_2(t))
     \end{aligned}
-\end{equation*}
+    \label{eq:feedback_controller}
+\end{equation}
 όπου $\phi(t) = (\phi_0 - \phi_\infty) e^{-\lambda t} + \phi_\infty$ η επιθυμητή ακρίβεια παρακολούθησης
 με παραμέτρους $\phi_0 > \phi_{\infty} > 0$, $\lambda > 0$, $\phi_0 \gg |r(0) - r_d(0)|$ και
 $T(z) = \ln\left( \frac{1+z}{1-z} \right)$. Επίσης $\rho \gg |\dot{r}(0) - \alpha(0)|$ και $k_1 > 0$, $k_2 > 0$
@@ -707,19 +692,18 @@ $r_d(t)$ για $\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rh
 k_2 = 2$.
 
 Από το Σχήμα~\ref{fig:task2_position_tracking_accuracy} βλέπουμε ότι για την ακρίβεια παρακολούθησης
-της επιθυμητής τροχίας ισχύει $|r(t) - r_d(t)| < \phi(t), \, \forall t \geq 0$. Ομοίως από το 
+της επιθυμητής τροχιάς ισχύει $|r(t) - r_d(t)| < \phi(t), \, \forall t \geq 0$. Ομοίως από το 
 Σχήμα~\ref{fig:task2_velocity_tracking_accuracy} για την ακρίβεια παρακολούθησης της επιθυμητής ταχύτητας 
-ισχύει $|\dot{r}(t) - \alpha(t)| < \rho, \, \forall t \geq 0$. Συνεπώς η υλοποίησή μας είναι ορθή για αυτές
+ισχύει $|\dot{r}(t) - \alpha(t)| < \rho, \, \forall t \geq 0$. Συνεπώς, η υλοποίησή μας είναι ορθή για αυτές
 τις επιλογές των παραμέτρων.
 
-Από το Σχήμα~\ref{fig:task2_position_tracking_accuracy_vs_phi_infty} παρατηρούμε ότι με τη μείωση του 
+Τέλος, από το Σχήμα~\ref{fig:task2_position_tracking_accuracy_vs_phi_infty} παρατηρούμε ότι με τη μείωση του 
 $\phi_{\infty}$ βελτιώνεται η ακρίβεια παρακολούθησης της επιθυμητής τροχίας $r_d(t)$.
 
 \begin{minipage}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\linewidth]{plot/task2_roll_angle_response.pdf}
-    \captionof{figure}{Γράφημα γωνίας κύλισης $r(t)$ και τροχιάς αναφοράς $r_d(t)$
-    ($\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \, k_2 = 2$)}
+    \captionof{figure}{Γράφημα γωνίας κύλισης $r(t)$ και τροχιάς αναφοράς $r_d(t)$}
     \label{fig:task2_roll_angle_response}
 \end{minipage}%
 \hfill
@@ -734,18 +718,194 @@ $\phi_{\infty}$ βελτιώνεται η ακρίβεια παρακολούθ�
 \begin{minipage}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\linewidth]{plot/task2_position_tracking_accuracy.pdf}
-    \captionof{figure}{Απόκλιση $|r(t) - r_d(t)|$ 
-    ($\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \, k_2 = 2$)}
+    \captionof{figure}{Απόκλιση $|r(t) - r_d(t)|$}
     \label{fig:task2_position_tracking_accuracy}
 \end{minipage}%
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\linewidth]{plot/task2_velocity_tracking_accuracy.pdf}
-    \captionof{figure}{Απόκλιση $|\dot{r}(t) - \alpha(t)|$ 
-    ($\phi_0 = 0.4, \, \phi_{\infty} = 0.05, \, \lambda = 0.4, \, \rho = 0.5, \, k_1 = 1.2, \, k_2 = 2$)}
+    \captionof{figure}{Απόκλιση $|\dot{r}(t) - \alpha(t)|$}
     \label{fig:task2_velocity_tracking_accuracy}
 \end{minipage}
 
+\subsection*{Εκτίμηση παραμέτρων με την μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
+
+Θα σχεδιάσουμε εκτιμητή πραγματικού χρόνου των άγνωστων παραμέτρων με τη μέθοδο 
+\selectlanguage{english}Lyapunov\selectlanguage{greek} θεωρώντας $d(t) = 0$.
+
+To σύστημα (\ref{eq:roll_angle_system}) μπορεί να γραφεί στη μορφή:
+\begin{equation}
+    \dot{x} = f(x)\theta_1^{\star} + g(x) \theta_2^{\star}
+    \label{eq:eq:roll_angle_system_2}
+\end{equation}
+όπου $x = [x_1, \, x_2]^T = [r,\,\dot{r}]^T$ το διάνυσμα καταστάσεων, 
+$\theta_1^{\star} = [\alpha_1,\,\alpha_2,\,\alpha_3]^T$, $\theta_2^{\star} = [1, \, b]$ τα διανύσματα των
+παραμέτρων που επιθυμούμε να εκτιμήσουμε και $f:\, \mathbb{R}^2 \to \mathbb{R}^{2 \times 3}$, 
+$g:\, \mathbb{R}^2 \to \mathbb{R}^{2 \times 2}$ συναρτήσεις που δίνονται από:
+\begin{equation}
+    f(x) = 
+    \begin{bmatrix}
+        0 & 0 & 0 \\
+        -x_2 & - \sin(x_1) & {x_2}^2 \sin(2 x_1)
+    \end{bmatrix}, \quad
+    g(x) = 
+    \begin{bmatrix}
+        x_2 & 0 \\
+        0 & u(x)
+    \end{bmatrix}
+    \label{eq:nonlinear_matrices}
+\end{equation}
+με $u: \mathbb{R}^2 \to \mathbb{R}$ τον ελεγκτή της (\ref{eq:feedback_controller}).
+
+Επιλέγουμε τη μεικτή δομή του συστήματος αναγνώρισης:
+\begin{equation}
+    \dot{\hat{x}} = f(x)\hat{\theta_1} + g(x) \hat{\theta_2} + 
+    C (x - \hat{x})
+    \label{eq:lyapunov_nonlinear_identification_system}
+\end{equation}
+όπου $\hat{\theta}_1,\, \hat{\theta}_2$ οι εκτιμήσεις των $\theta_1^{\star},\, \theta_2^{\star}$ αντίστοιχα 
+και $C$ συμμετρικός και θετικά ημιορισμένος πίνακας. Το σφάλμα αναγνώρισης ορίζεται ως $e = x - \hat{x}$.
+Παραγωγίζοντας ως προς το χρόνο το $e$ κατά μήκος των λύσεων των (\ref{eq:eq:roll_angle_system_2}), 
+(\ref{eq:lyapunov_nonlinear_identification_system}) προκύπτει η διαφορική εξίσωση του σφάλματος:
+\begin{equation}
+    \dot{e} = - Ce - f(x) \tilde{\theta}_1 - g(x) \tilde{\theta}_2
+    \label{eq:lyapunov_nonlinear_identification_error_derivative}
+\end{equation}
+όπου $\tilde{\theta}_1 = \hat{\theta}_1 - \theta_1^{\star}$ και 
+$\tilde{\theta}_2 = \hat{\theta}_2 - \theta_2^{\star}$. Ορίζουμε την συνάρτηση 
+\selectlanguage{english}Lyapunov\selectlanguage{greek}:
+\begin{equation}
+    V = \frac{1}{2}e^Te + \frac{1}{2}{\tilde{\theta}_1}^T \tilde{\theta}_1 +
+    \frac{1}{2}{\tilde{\theta}_2}^T \tilde{\theta}_2
+    \label{eq:lyapunov_function_nonlinear}
+\end{equation}
+Παραγωγίζοντας την (\ref{eq:lyapunov_function_nonlinear}) ως προς τον χρόνο και αντικαθιστώντας την
+(\ref{eq:lyapunov_nonlinear_identification_error_derivative}) βρίσκουμε:
+\begin{equation}
+    \dot{V} = -e^T C e - e^T f(x) \tilde{\theta}_1 - e^T f(x) \tilde{\theta}_2 + 
+    \tilde{\theta}_1^T \dot{\hat{\theta}}_1 + \tilde{\theta}_2^T \dot{\hat{\theta}}_2
+    \label{eq:lyapunov_function_derivative_nonlinear}
+\end{equation}
+Επιλέγοντας:
+\begin{equation*}
+    \begin{aligned}
+        &\dot{\hat{\theta}}_1 = f^T(x) e \\
+        &\dot{\hat{\theta}}_2 = g^T(x) e
+    \end{aligned}
+\end{equation*}
+η (\ref{eq:lyapunov_function_derivative_nonlinear}) γίνεται:
+\begin{equation*}
+    \dot{V} = -e^T C e \leq 0
+\end{equation*}
+αφού ο $C$ συμμετρικός και θετικά ημιορισμένος. Όπως και προηγουμένως, θέτουμε $C = \psi I$ με $I$ τον 
+μοναδιαίο πίνακα και $\psi > 0$ το κέρδος.
+
+Στο Σχήμα~\ref{fig:task2_identification_error} παρουσιάζεται η έξοδος και το σφάλμα του συστήματος αναγνώρισης.
+Διαπιστώνεται ότι το σφάλμα συγκλίνει γρήγορα στο μηδέν, ακόμη και όταν οι αρχικές συνθήκες διαφέρουν σημαντικά
+από την πραγματική αρχική κατάσταση του συστήματος. Η συμπεριφορά αυτή οφείλεται στην ευστάθεια του συστήματος
+εκτίμησης, καθώς ισχύει $\dot{V} \leq 0$. Η σύγκλιση αυτή είναι ταχύτερη όσο το κέρδος $\psi$ αυξάνεται. 
+
+Στο Σχήμα~\ref{fig:task2_parameter_estimations} απεικονίζονται οι εκτιμήσεις των παραμέτρων. Παρατηρείται ότι
+οι εκτιμήσεις συγκλίνουν προς σταθερές τιμές, γεγονός που απορρέει από την ευστάθεια του συστήματος εκτίμησης.
+Ωστόσο, οι τιμές αυτές διαφέρουν από τις πραγματικές παραμέτρους, καθώς η είσοδος ελέγχου $u(t)$ από την 
+(\ref{eq:feedback_controller}) δεν ικανοποιεί τη ΣΕΔ.
+
+\subsection*{Εκτίμηση παραμέτρων παρουσία εξωτερικής διαταραχής}
+
+Θα επαναλάβουμε την εκτίμηση των παραμέτρων με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek},
+θεωρώντας αυτή τη φορά την ύπαρξη εξωτερικών διαταραχών $d(t) = 0.15 \sin(0.5 t)$. Το 
+σύστημα μπορεί να γραφεί ως:
+\begin{equation}
+    \dot{x} = f(x)\theta_1^{\star} + g(x)\theta_2^{\star} + h(t)
+    \label{eq:eq:roll_angle_system_2}
+\end{equation}
+όπου $h(t) = [0,\, d(t)]^T$ και οι $f(x),\, g(x)$ δίνονται από την (\ref{eq:nonlinear_matrices}). Ακολουθώντας
+την ίδια μεθοδολογία με την περίπτωση χωρίς διαταραχές, προκύπτει η διαφορική εξίσωση του σφάλματος:
+\begin{equation}
+    \dot{e} = -C e - f(x)\tilde{\theta}_1 - g(x)\tilde{\theta}_2 + h(t)
+    \label{eq:lyapunov_nonlinear_identification_error_derivative}
+\end{equation}
+
+Η συνάρτηση \selectlanguage{english}Lyapunov\selectlanguage{greek} παραμένει ως έχει στην 
+(\ref{eq:lyapunov_function_nonlinear}). Παράγωγίζοντας κατά τα γνωστά, λαμβάνουμε:
+\begin{equation}
+    \dot{V} = -e^T C e + e^T h(t)
+    \label{eq:lyapunov_derivative_nonlinear_disturbances}
+\end{equation}
+Παρατηρούμε ότι σε αυτή την περίπτωση δεν ισχύει $\dot{V} \leq 0, \, \forall t$ για οποιονδήποτε συμμετρικό και 
+θετικά ημιορισμένο πίνακα $C$. Θέτοντας $C = \psi I$, προκύπτει: 
+$\dot{V} = -\psi \|e\|^2 + e_2 d(t), \, e = [e_1,\, e_2]^T$. Συνεπώς, για επαρκώς μεγάλο $\psi$ μπορούμε να 
+εξασφαλίσουμε ότι $\dot{V} \leq 0$ και να διατηρήσουμε την ευστάθεια του συστήματος εκτίμησης.
+
+Από το Σχήμα~\ref{fig:task2_identification_error_disturbances_1} παρατηρούμε ότι για $\psi = 0.1$
+το σύστημα αναγνώρισης αδυνατεί να παρακολουθήσει την πραγματική έξοδο λόγω αστάθειας στο σχήμα εκτίμησης. 
+Αντιθέτως, για μεγαλύτερη τιμή του κέρδους, όπως φαίνεται στο 
+Σχήμα~\ref{fig:task2_identification_error_disturbances_2}, το σφάλμα αναγνώρισης συγκλίνει ταχύτατα στο μηδέν 
+επιβεβαιώνοντας την ευστάθεια του συστήματος.
+
+Αντίστοιχα, από το Σχήμα~\ref{fig:task2_parameter_estimations_disturbances_1} παρατηρείται ότι για $\psi = 0.1$
+οι εκτιμήσεις των παραμέτρων δεν συγκλίνουν σε σταθερές τιμές, αλλά παρουσιάζουν ταλαντώσεις εξαιτίας της 
+αστάθειας. Αντιθέτως, όπως φαίνεται στο Σχήμα~\ref{fig:task2_parameter_estimations_disturbances_2}, για 
+μεγαλύτερη τιμή του $\psi$ οι εκτιμήσεις συγκλίνουν σε σταθερές τιμές, επαληθεύοντας την ευστάθεια του 
+εκτιμητή υπό παρουσία διαταραχών.
+
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_identification_error.pdf}
+    \captionof{figure}{Σφάλμα αναγνώρισης με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
+    \label{fig:task2_identification_error}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_parameter_estimations.pdf}
+    \captionof{figure}{Εκτιμήσεις παραμέτρων με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
+    \label{fig:task2_parameter_estimations}
+\end{minipage}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{
+        plot/task2_identification_error_disturbances_1.pdf}
+        \caption{}
+        \label{fig:task2_identification_error_disturbances_1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{
+        plot/task2_identification_error_disturbances_2.pdf}
+        \caption{}
+        \label{fig:task2_identification_error_disturbances_2}
+    \end{subfigure}
+    \caption{Σφάλμα αναγνώρισης με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}
+    παρουσία διαταραχών με α) $\psi = 0.1$, β) $\psi = 10$}
+    \label{fig:task2_identification_error_disturbances}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{
+        plot/task2_parameter_estimations_disturbances_1.pdf}
+        \caption{}
+        \label{fig:task2_parameter_estimations_disturbances_1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{
+        plot/task2_parameter_estimations_disturbances_2.pdf}
+        \caption{}
+        \label{fig:task2_parameter_estimations_disturbances_2}
+    \end{subfigure}
+    \caption{Εκτιμήσεις παραμέτρων με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}
+    παρουσία διαταραχών με α) $\psi = 0.1$, β) $\psi = 10$}
+    \label{fig:task2_parameter_estimations_disturbances}
+\end{figure}
 
 \end{document}
