@@ -106,3 +106,49 @@ legend(labels, 'Interpreter', 'latex');
 title('Position Tracking Accuracy vs $\phi_{\infty}$', 'Interpreter', 'latex');
 filePath = fullfile(outputDir, 'task2_position_tracking_accuracy_vs_phi_infty.pdf');
 exportgraphics(gcf, filePath, 'ContentType', 'vector');
+
+%% Estimate parameters using Lyapunov method
+
+a1_0 = 0.8;
+a2_0 = 0.5;
+a3_0 = 0.4;
+b_0  = 0.7;
+
+% Initial conditions: x, hat_x, hat_theta1, hat_theta2
+z0 = [0; 0;                % x
+      0.1; 0.0;                % hat_x
+      a1_0; a2_0; a3_0;    % hat_theta1
+      1; b_0];             % hat_theta2
+
+C = eye(2);
+
+tspan = [0, T_0];
+theta_star = [a1; a2; a3; 1; b];
+[t, z] = ode45(@(t, z) lyapunov_nonlinear(t, z, u, C, theta_star), tspan, z0);
+
+theta_star = z(:,[5, 6, 7, 9]);
+
+figure;
+grid on; hold on;
+N = length(t);
+plot(t, theta_star, 'LineWidth', 1);
+plot(t, repmat([a1, a2, a3, b], N, 1), '--r', 'LineWidth', 1);
+legend({'$\hat{\alpha}_1$', '$\hat{\alpha}_2$', '$\hat{\alpha}_3$', '$\hat{b}$'}, 'Interpreter', 'latex');
+xlabel('t');
+title('Lyapunov mixed: Parameter Estimations');
+filePath = fullfile(outputDir, 'task2_parameter_estimations.pdf');
+exportgraphics(gcf, filePath, 'ContentType', 'vector');
+
+figure;
+r = z(:,1);
+r_hat = z(:,3);
+e = r - r_hat;
+grid on; hold on;
+N = length(t);
+plot(t, [r, r_hat, e], 'LineWidth', 1);
+legend({'$r$', '$\hat{r}$', '$e$'}, 'Interpreter', 'latex');
+xlabel('t');
+title('Lyapunov mixed: Identification error');
+filePath = fullfile(outputDir, 'task2_identification_error.pdf');
+exportgraphics(gcf, filePath, 'ContentType', 'vector');
+
