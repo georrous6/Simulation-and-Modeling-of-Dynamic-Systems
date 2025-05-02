@@ -811,6 +811,20 @@ $\tilde{\theta}_2 = \hat{\theta}_2 - \theta_2^{\star}$. Ορίζουμε την 
 Ωστόσο, οι τιμές αυτές διαφέρουν από τις πραγματικές παραμέτρους, καθώς η είσοδος ελέγχου $u(t)$ από την 
 (\ref{eq:feedback_controller}) δεν ικανοποιεί τη ΣΕΔ.
 
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_identification_error.pdf}
+    \captionof{figure}{Σφάλμα αναγνώρισης με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
+    \label{fig:task2_identification_error}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot/task2_parameter_estimations.pdf}
+    \captionof{figure}{Εκτιμήσεις παραμέτρων με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
+    \label{fig:task2_parameter_estimations}
+\end{minipage}
+
 \subsection*{Εκτίμηση παραμέτρων παρουσία εξωτερικής διαταραχής}
 
 Θα επαναλάβουμε την εκτίμηση των παραμέτρων με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek},
@@ -849,20 +863,6 @@ $\dot{V} = -\psi \|e\|^2 + e_2 d(t), \, e = [e_1,\, e_2]^T$. Συνεπώς, γ�
 αστάθειας. Αντιθέτως, όπως φαίνεται στο Σχήμα~\ref{fig:task2_parameter_estimations_disturbances_2}, για 
 μεγαλύτερη τιμή του $\psi$ οι εκτιμήσεις συγκλίνουν σε σταθερές τιμές, επαληθεύοντας την ευστάθεια του 
 εκτιμητή υπό παρουσία διαταραχών.
-
-\begin{minipage}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{plot/task2_identification_error.pdf}
-    \captionof{figure}{Σφάλμα αναγνώρισης με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
-    \label{fig:task2_identification_error}
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{plot/task2_parameter_estimations.pdf}
-    \captionof{figure}{Εκτιμήσεις παραμέτρων με τη μέθοδο \selectlanguage{english}Lyapunov\selectlanguage{greek}}
-    \label{fig:task2_parameter_estimations}
-\end{minipage}
 
 \begin{figure}[h!]
     \centering
