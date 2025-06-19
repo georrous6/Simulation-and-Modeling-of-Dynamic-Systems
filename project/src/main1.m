@@ -19,10 +19,11 @@ t = 0:1/fs:30;
 x0 = [0; 0];
 
 % Initial parameter estimations
-A_0 = [-1.2, 0; 1, 3];
-B_0 = [3; 2];
+A_0 = [-1.1, 1;
+        -0.5, -4];
+B_0 = [2.5; 2];
 C = eye(2);
-theta_0 = [x0; A_0(:); B_0];
+theta_0 = [x0; A_0(1,1); A_0(1,2); A_0(2,1); A_0(2,2); B_0];
 
 % Input signals
 u1 = @(t) ones(size(t));
@@ -65,8 +66,8 @@ for i = 1:length(inputs)
     % Plot Parameter Estimations
     figure;
     plot(t, theta_hat(:,3:end), 'LineWidth', 1.5);
-    legend({'$\hat{\alpha}_{11}$', '$\hat{\alpha}_{21}$', ...
-            '$\hat{\alpha}_{12}$', '$\hat{\alpha}_{22}$', ...
+    legend({'$\hat{\alpha}_{11}$', '$\hat{\alpha}_{12}$', ...
+            '$\hat{\alpha}_{21}$', '$\hat{\alpha}_{22}$', ...
             '$\hat{b}_1$', '$\hat{b}_2$'}, 'Interpreter', 'latex');
     grid on;
     xlabel('t [sec]');

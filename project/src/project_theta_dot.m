@@ -1,8 +1,8 @@
 function projected_dot = project_theta_dot(theta_dot, theta)
 % PROJECT_THETA_DOT Applies projection to the parameter derivative vector
 % Inputs:
-%   theta_dot - 6x1 vector: [a11_dot; a21_dot; a12_dot; a22_dot; b1_dot; b2_dot]
-%   theta     - 6x1 vector: [a11;     a21;     a12;     a22;     b1;     b2    ]
+%   theta_dot - 6x1 vector: [a11_dot; a12_dot; a21_dot; a22_dot; b1_dot; b2_dot]
+%   theta     - 6x1 vector: [a11;     a12;     a21;     a22;     b1;     b2    ]
 %
 % Output:
 %   projected_dot - 6x1 vector with projection applied

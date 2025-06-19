@@ -2,7 +2,8 @@ function [theta_hat, V] = lyapunov_mixed(theta_0, x_val, u_val, t, C, A, B)
     theta_0 = theta_0(:);
 
     x_hat = theta_0(1:2);
-    A_hat = reshape(theta_0(3:6), [2, 2]);
+    A_hat = [theta_0(3), theta_0(4); 
+             theta_0(5), theta_0(6)];
     B_hat = theta_0(7:8);
 
     N = size(x_val, 1);
@@ -22,16 +23,17 @@ function [theta_hat, V] = lyapunov_mixed(theta_0, x_val, u_val, t, C, A, B)
         B_hat_dot = e * u';
 
         % Construct 6x1 derivative vector
-        theta_dot = [A_hat_dot(:); B_hat_dot];
+        theta_dot = [A_hat_dot(1,1); A_hat_dot(1,2); A_hat_dot(2,1); A_hat_dot(2,2); B_hat_dot];
         
         % Construct 6x1 parameter vector
-        theta = [A_hat(:); B_hat];
+        theta = [A_hat(1,1); A_hat(1,2); A_hat(2,1); A_hat(2,2); B_hat];
         
         % Apply projection
         theta_dot_projected = project_theta_dot(theta_dot, theta);
         
         % Unpack projected derivatives
-        A_hat_dot = reshape(theta_dot_projected(1:4), [2, 2]);
+        A_hat_dot = [theta_dot_projected(1), theta_dot_projected(2); 
+                     theta_dot_projected(3), theta_dot_projected(4)];
         B_hat_dot = theta_dot_projected(5:6);
         
         % Update parameter estimates
@@ -46,7 +48,7 @@ function [theta_hat, V] = lyapunov_mixed(theta_0, x_val, u_val, t, C, A, B)
         V(i,2) = -e' * C * e;
         
         theta_hat(i,1:2) = x_hat';
-        theta_hat(i,3:6) = A_hat(:);
+        theta_hat(i,3:6) = [A_hat(1,1), A_hat(1,2), A_hat(2,1), A_hat(2,2)];
         theta_hat(i,7:8) = B_hat';
     end
 
