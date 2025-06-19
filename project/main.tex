@@ -27,30 +27,30 @@
 
 Σε αυτό το μέρος μελετάται ένα γραμμικό δυναμικό σύστημα δεύτερης τάξης της μορφής:
 \begin{equation}
-\dot{x}(t) = A x(t) + B u(t),
+\dot{\mathbf{x}}(t) = \mathbf{A} \mathbf{x}(t) + \mathbf{B} u(t),
 \end{equation}
-όπου $x(t) \in \mathbb{R}^2$ είναι το διάνυσμα των καταστάσεων, και $u(t) \in \mathbb{R}$ 
-η είσοδος του συστήματος. Οι πίνακες $A \in \mathbb{R}^{2 \times 2}$ και 
-$B \in \mathbb{R}^{2 \times 1}$ είναι άγνωστοι αλλά σταθεροί. Επίσης, γνωρίζουμε ότι:
+όπου $\mathbf{x}(t) \in \mathbb{R}^2$ είναι το διάνυσμα των καταστάσεων, και $u(t) \in \mathbb{R}$ 
+η είσοδος του συστήματος. Οι πίνακες $\mathbf{A} \in \mathbb{R}^{2 \times 2}$ και 
+$\mathbf{B} \in \mathbb{R}^{2 \times 1}$ είναι άγνωστοι αλλά σταθεροί. Επίσης, γνωρίζουμε ότι:
 \begin{equation}
 -3 \leq a_{11} \leq -1, \quad \quad b_2 \geq 1.
 \label{eq:restrictions}
 \end{equation}
 
 Σκοπός είναι η ανάπτυξη και ανάλυση ενός αλγορίθμου πραγματικού χρόνου για την εκτίμηση  
-$\hat{A},\,\hat{B}$ των πινάκων $A$ και $B$, με δεδομένο ότι τόσο η είσοδος $u(t)$ όσο και  
-οι καταστάσεις $x(t)$ είναι μετρήσιμες. Για τη σχεδίαση του αλγορίθμου, αρχικά υποθέτουμε ότι  
-δεν υπάρχουν διαταραχές στις μετρήσεις των καταστάσεων του συστήματος. Στη συνέχεια,  
-εισάγεται στο σύστημα σφάλμα πόλωσης και επανασχεδιάζεται ο αλγόριθμος, με στόχο  
-τη μελέτη της επίδρασης του σφάλματος στην ακρίβεια των εκτιμήσεων. Για σκοπούς προσομοίωσης,  
-χρησιμοποιούνται ως πραγματικές τιμές οι παρακάτω πίνακες:
+$\hat{\mathbf{A}},\,\hat{\mathbf{B}}$ των πινάκων $A$ και $B$, με δεδομένο ότι τόσο η είσοδος 
+$u(t)$ όσο και το διάνυσμα καταστάσεων $\mathbf{x}(t)$ είναι μετρήσιμα. Για τη σχεδίαση του 
+αλγορίθμου, αρχικά υποθέτουμε ότι δεν υπάρχουν διαταραχές στις μετρήσεις των καταστάσεων του 
+συστήματος. Στη συνέχεια, εισάγεται στο σύστημα σφάλμα πόλωσης και επανασχεδιάζεται ο αλγόριθμος, 
+με στόχο τη μελέτη της επίδρασης του σφάλματος στην ακρίβεια των εκτιμήσεων. Για σκοπούς 
+προσομοίωσης, χρησιμοποιούνται ως πραγματικές τιμές οι παρακάτω πίνακες:
 \[
-A = 
+\mathbf{A} = 
 \begin{bmatrix}
 -2.15 & 0.25 \\
 -0.75 & -2
 \end{bmatrix}, \quad
-B = 
+\mathbf{B} = 
 \begin{bmatrix}
 0 \\
 1.5
@@ -59,12 +59,12 @@ B =
 
 \subsection*{Εκτίμηση Παραμέτρων χωρίς Σφάλμα Πόλωσης}
 
-Πρωτού προχωρήσουμε στη σχεδίαση του αλγορίθμου πραγματικού χρόνου για την εκτίμηση των $A,\,B$,  
-πρέπει να επιλέξουμε το είδος της εισόδου που θα εφαρμόσουμε στο σύστημα, καθώς και τη συχνότητα  
-δειγματοληψίας. Μία συνήθης πρακτική για την επιλογή της συχνότητας δειγματοληψίας είναι να την  
-ορίζουμε περίπου δέκα φορές μεγαλύτερη από το εύρος ζώνης του συστήματος. Ωστόσο, επειδή το μοντέλο  
-μας υπάγεται στην κατηγορία ``γκρι κουτί'', η εκ των προτέρων γνώση μας για το σύστημα δεν επαρκεί  
-για τον άμεσο υπολογισμό του εύρους ζώνης.
+Πρωτού προχωρήσουμε στη σχεδίαση του αλγορίθμου πραγματικού χρόνου για την εκτίμηση των 
+$\mathbf{A}, \, \mathbf{B}$, πρέπει να επιλέξουμε το είδος της εισόδου που θα εφαρμόσουμε 
+στο σύστημα, καθώς και τη συχνότητα δειγματοληψίας. Μία συνήθης πρακτική για την επιλογή της 
+συχνότητας δειγματοληψίας είναι να την ορίζουμε περίπου δέκα φορές μεγαλύτερη από το εύρος 
+ζώνης του συστήματος. Ωστόσο, επειδή το μοντέλο μας υπάγεται στην κατηγορία ``γκρι κουτί'', 
+η εκ των προτέρων γνώση μας για το σύστημα δεν επαρκεί για τον άμεσο υπολογισμό του εύρους ζώνης.
 
 \subsubsection*{Επιλογή Συχνότητας Δειγματολειψίας}
 
@@ -82,28 +82,40 @@ $x_2(t)$ δεν παρατηρείται υπερύψωση, άρα ο χρόν�
 \selectlanguage{english}sec\selectlanguage{greek}. Συνεπώς, η συχνότητα δειγματολειψίας πρέπει να 
 ικανοποιεί $f_s > 10 / \tau = 20$\selectlanguage{english}Hz\selectlanguage{greek}.
 
-Για το πραγματικό σύστημα, οι ιδιοτιμές του πίνακα $A$ είναι $\lambda_{1,2} = -2.075 \pm 0.4265j$, 
+Για το πραγματικό σύστημα, οι ιδιοτιμές του πίνακα $\mathbf{A}$ είναι $\lambda_{1,2} = -2.075 \pm 0.4265j$, 
 και η σταθερά χρόνου $\tau = \frac{1}{\zeta \omega_n} = 0.482$, η οποία είναι πολύ κοντά στην αρχική 
 μας εκτίμηση.
 
-\begin{figure}
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=0.75\linewidth]{plot/task1_step_response.pdf}
-    \caption{Βηματική απόκριση του συστήματος}
+    \includegraphics[width=\textwidth]{plot/task1_step_response.pdf}
+    \caption{}
     \label{fig:task1_step_response}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_sinusoidal_response.pdf}
+    \caption{}
+    \label{fig:task1_sinusoidal_response}
+  \end{subfigure}
+  \caption{Απόκριση του συστήματος για α) βηματική είσοδο, β) $u(t) = 2 \sin t$}
+  \label{fig:task1_response}
 \end{figure}
 
 \subsubsection*{Επιλογή Εισόδου}
 
 Για να αποτυπωθεί πλήρως η δυναμική του συστήματος, είναι σημαντικό η είσοδος να περιέχει αρκετές
 συχνότητες ώστε να διεγείρει όλους τους ρυθμούς του συστήματος. Επίσης, με κατάλληλη επιλογή της
-εισόδου ώστε να ικανοποιεί την Συνθήκη Εναπομείνουσας Διέγερσης (ΣΕΔ), οι μέδοδοι εκτίμησης παραμέτρων 
+εισόδου ώστε να ικανοποιεί την Συνθήκη Εναπομείνουσας Διέγερσης (ΣΕΔ), οι μέθοδοι εκτίμησης παραμέτρων 
 πραγματικού χρόνου (κλίσης, \selectlanguage{english}Lyapunov\selectlanguage{greek}) μας εγγυόνται την 
 σύγκλιση των παραμετρικών σφαλμάτων στο μηδέν.
 
 Το γραμμικό μας σύστημα είναι τάξεως $n=2$. Για να ικανοποιεί η είσοδός μας $u$ μία ΣΕΔ πρέπει
 να περιέχει τουλάχιστον $m = \left\lceil \frac{n}{2} \right\rceil$ διακριτές συχνότητες και τότε
-το σήμα $u$ λέγεται επιμένουσα διέγερση τάξεως $n$. Στην ανάλυσή μας παρακάτω επιλέγουμε $u(t) = \sin t$.
+το σήμα $u$ λέγεται επιμένουσα διέγερση τάξεως $n$. Στην ανάλυσή μας παρακάτω επιλέγουμε $u(t) = 2 \sin t$.
 
 \subsubsection*{Σχεδίαση Αλγορίθμου Πραγματικού Χρόνου}
 Λόγω της εκ των προτέρων γνώσης που έχουμε για το επιτρεπτό εύρος τιμών ορισμένων παραμέτρων, 
@@ -117,58 +129,64 @@ $x_2(t)$ δεν παρατηρείται υπερύψωση, άρα ο χρόν�
 
 Το σύστημα αναγνώρισης είναι:
 \begin{equation}
-    \dot{\hat{x}} = \hat{A}x + \hat{B} u + C(x - \hat{x}),
+    \dot{\hat{\mathbf{x}}} = \hat{\mathbf{A}}\mathbf{x} + \hat{\mathbf{B}} u + 
+    \mathbf{C}(\mathbf{x} - \hat{\mathbf{x}}),
     \label{eq:lyapunov_mixed_identification_system}
 \end{equation}
-όπου $C$ συμμετρικός και θετικά ημιορισμένος πίνακας. Η παράγωγος του σφάλματος αναγνώρισης $e = x - \hat{x}$ 
+όπου $\mathbf{C}$ συμμετρικός και θετικά ημιορισμένος πίνακας. Η παράγωγος του σφάλματος αναγνώρισης 
+$\mathbf{e} = \mathbf{x} - \hat{\mathbf{x}}$ 
 βρίσκεται:
 \begin{equation}
-    \dot{e} = -\tilde{A}x - \tilde{B}u - Ce
+    \dot{\mathbf{e}} = -\tilde{\mathbf{A}}\mathbf{x} - \tilde{\mathbf{B}}u - \mathbf{C}\mathbf{e}
     \label{eq:lyapunov_mixed_identification_error_derivative}
 \end{equation}
 Ως συνάρτηση \selectlanguage{english}Lyapunov\selectlanguage{greek} επιλέγεται η:
 \begin{equation}
-    \dot{V} = \frac{1}{2}e^{\top}e + \frac{1}{2}\mathrm{Tr}\{\tilde{A}^{\top}\tilde{A}\}
-    + \frac{1}{2}\mathrm{Tr}\{\tilde{B}^{\top}\tilde{B}\}
+    V = \frac{1}{2}\mathbf{e}^{\top}\mathbf{e} + 
+    \frac{1}{2}\mathrm{Tr}\{\tilde{\mathbf{A}}^{\top}\tilde{\mathbf{A}}\}
+    + \frac{1}{2}\mathrm{Tr}\{\tilde{\mathbf{B}}^{\top}\tilde{\mathbf{B}}\}
     \label{eq:lyapunov_function}
 \end{equation}
 Παραγωγίζοντας την (\ref{eq:lyapunov_function}) και αντικαθιστώντας
 την (\ref{eq:lyapunov_mixed_identification_error_derivative}) προκύπτει:
 \begin{equation}
-    \dot{V} = -e^TCe + \mathrm{Tr}\{\tilde{A}^T\dot{\hat{A}} + \tilde{B}^T\dot{\hat{B}} - 
-    \tilde{A}xe^T - \tilde{B}ue^T\}.
+    \dot{V} = -\mathbf{e}^{\top}\mathbf{C}\mathbf{e} + 
+    \mathrm{Tr}\{\tilde{\mathbf{A}}^{\top}\dot{\hat{\mathbf{A}}} + 
+    \tilde{\mathbf{B}}^{\top}\dot{\hat{\mathbf{B}}} - 
+    \tilde{\mathbf{A}}\mathbf{x}\mathbf{e}^{\top} - 
+    \tilde{\mathbf{B}}u\mathbf{e}^{\top}\}.
     \label{eq:lyapunov_mixed_function_derivative_1}  
 \end{equation}
 Επιλέγουμε:
 \begin{equation}
     \begin{aligned}
-        \dot{\hat{A}} = ex^T \\ 
-        \dot{\hat{B}} = eu^T
+        \dot{\hat{\mathbf{A}}} = \mathbf{e}\mathbf{x}^{\top} \\ 
+        \dot{\hat{\mathbf{B}}} = \mathbf{e}u^{\top}
     \end{aligned}
     \label{eq:lyapunov_mixed_update_formula}
 \end{equation}
 και η (\ref{eq:lyapunov_mixed_function_derivative_1}) γίνεται:
 \begin{equation}
-    \dot{V} = -e^TCe
+    \dot{V} = -\mathbf{e}^{\top}\mathbf{C}\mathbf{e}
     \label{eq:lyapunov_mixed_function_derivative_2}
 \end{equation}
-Βλέπουμε ότι στη μικτή δομή ισχύει $\dot{V} \leq 0, \, \forall t$, καθώς ο $C$ είναι συμμετρικός και θετικά
-ημιορισμένος. Συνεπώς, το σύστημα (\ref{eq:lyapunov_mixed_identification_system}), 
+Βλέπουμε ότι στη μικτή δομή ισχύει $\dot{V} \leq 0, \, \forall t$, καθώς ο $\mathbf{C}$ είναι 
+συμμετρικός και θετικά ημιορισμένος. Συνεπώς, το σύστημα (\ref{eq:lyapunov_mixed_identification_system}), 
 (\ref{eq:lyapunov_mixed_update_formula}) είναι ευσταθές.
 
-Στην ανάλυσή μας θέσαμε $C = k I$, όπου $I$ είναι ο μοναδιαίος πίνακας και $k > 0$ το κέρδος. 
-Η επιλογή του $k$ έγινε και πάλι με την τεχνική 
+Στην ανάλυσή μας θέσαμε $\mathbf{C} = k \mathbf{I}$, όπου $\mathbf{I}$ είναι ο μοναδιαίος πίνακας και 
+$k > 0$ το κέρδος. Η επιλογή του $k$ έγινε με τη μέθοδο 
 \selectlanguage{english}trial and error\selectlanguage{greek}. Μεγαλύτερες τιμές του $k$ έχουν ως 
-αποτέλεσμα να υπερισχύει ο διορθωτικός όρος $C(x - \hat{x})$ στην 
-(\ref{eq:lyapunov_mixed_identification_system}), οδηγώντας σε ταχύτερη σύγκλιση. Ωστόσο, πολύ μεγάλες τιμές 
-του $k$ ενδέχεται να καταστήσουν το σύστημα άκαμπτο. Τελικά, επιλέγουμε $k = 1$.
+αποτέλεσμα να υπερισχύει ο διορθωτικός όρος $\mathbf{C}(\mathbf{x} - \hat{\mathbf{x}})$ στην 
+(\ref{eq:lyapunov_mixed_identification_system}), οδηγώντας σε ταχύτερη σύγκλιση. Ωστόσο, πολύ μεγάλες 
+τιμές του $k$ ενδέχεται να καταστήσουν το σύστημα άκαμπτο. Τελικά, επιλέγουμε $k = 1$.
 
 Έχοντας εξασφαλίσει την ευστάθεια του αλγορίθμου απουσία περιορισμών, συνεχίζουμε με την σχεδίαση του
 αναδρομικού αλγορίθμου προβολής. Έστω
 \[
 \hat{\theta} =
 \begin{bmatrix}
-    \alpha_{11} & \alpha_{21} & \alpha_{12} & \alpha_{22} & b_1 & b_2
+    \hat{\alpha}_{11} & \hat{\alpha}_{21} & \hat{\alpha}_{12} & \hat{\alpha}_{22} & \hat{b}_1 & \hat{b}_2
 \end{bmatrix}^{\top}
 \]
 το διάνυσμα των εκτιμήσεων των παραμέτρων που προκύπτει από το σύστημα (\ref{eq:lyapunov_mixed_identification_system}), (\ref{eq:lyapunov_mixed_update_formula}). 
@@ -196,7 +214,7 @@ $x_2(t)$ δεν παρατηρείται υπερύψωση, άρα ο χρόν�
 \]
 και η Ιακωβιανή της $g(\hat{\theta})$:
 \[
-    \nabla g(\hat{\theta}) = 
+    \mathbf{J}_g(\hat{\theta}) = 
     \begin{bmatrix}
          \nabla g_1(\hat{\theta}) \\
          \nabla g_2(\hat{\theta}) \\
@@ -210,19 +228,126 @@ $x_2(t)$ δεν παρατηρείται υπερύψωση, άρα ο χρόν�
 \]
 Ο αλγόριθμος \selectlanguage{english}Lyapunov\selectlanguage{greek} με προβολή μεικτής δομής που πετυχαίνει
 το παραπάνω αποτέλεσμα είναι:
-\[
-\dot{\hat{\theta}}_\Pi = 
-\begin{cases}
-\dot{\hat{\theta}}, & \text{αν } g_i(\hat{\theta}) < 0 
-\text{ ή } \nabla g_i^\top (-\Gamma \dot{\hat{\theta}}) \leq 0 \\
-\dot{\hat{\theta}} - \Gamma \nabla g_i \left( \nabla g_i^\top \Gamma \nabla g_i \right)^{-1} \nabla g_i^\top 
-\dot{\hat{\theta}}, & \text{διαφορετικά}
-\end{cases}
-\]
-Ο διορθωτικός όρος 
+\begin{equation}
+    \dot{\hat{\theta}}_\Pi = 
+    \begin{cases}
+    \dot{\hat{\theta}}, & \text{αν } g_i(\hat{\theta}) < 0 
+    \text{ ή } \nabla g_i^\top \dot{\hat{\theta}} \leq 0 \\
+    \dot{\hat{\theta}} - 
+    \mathbf{\Gamma} \frac{\nabla g_i {\nabla g_i}^{\top}}{{\nabla g_i}^{\top} \mathbf{\Gamma} \nabla g_i}
+    \dot{\hat{\theta}}, & \text{διαφορετικά}
+    \end{cases}
+    \label{eq:lyapunov_mixed_projection}
+\end{equation}
+όπου $\mathbf{\Gamma}  = \mathbf{\Gamma}^{\top} \in \mathbb{R}^{6 \times 6}$ ο πίνακας κέρδους προσαρμογής
+και ο δείκτης $i$ υποδηλώνει τον $i$-οστό περιορισμό. Ο διορθωτικός όρος 
 $- \Gamma \nabla g_i \left( \nabla g_i^\top \Gamma \nabla g_i \right)^{-1} \nabla g_i^\top 
-\dot{\hat{\theta}}$ εφαρμόζεται για κάθε εκτίμηση $\hat{\theta}_i$ η οποία πάει να βγει εκτός
-του εφικτού συνόλου $\Theta$.
+\dot{\hat{\theta}}$ εγγυάται ότι $\hat{\theta} \in \Theta, \, \forall t \ge 0$ με την προϋπόθεση ότι
+$\hat{\theta}(0) \in \Theta$. Πράγματι:
+\[
+\begin{aligned}
+\dot{\hat{\theta}}_{\Pi}^{\top} \nabla g_i &= \dot{\hat{\theta}}^{\top} \nabla g_i - 
+\dot{\hat{\theta}}^{\top} \frac{\nabla g_i \nabla g_i^{\top}}{\nabla g_i^{\top} \mathbf{\Gamma} \nabla g_i}
+\mathbf{\Gamma}^{\top} \nabla g_i \\
+&= \dot{\hat{\theta}}^{\top} \nabla g_i - \dot{\hat{\theta}}^{\top} \nabla g_i 
+\frac{\nabla g_i^{\top} \mathbf{\Gamma} \nabla g_i}{\nabla g_i^{\top} \mathbf{\Gamma} \nabla g_i} \\
+&= 0
+\end{aligned}
+\]
+Συνεπώς, όταν ο $i$-οστός περιορισμός είναι ενεργός, η γωνία μεταξύ των $\dot{\hat{\theta}}_{\Pi}^{\top}$
+και $\nabla g_i$ είναι ορθή, άρα η νέα εκτίμηση $\hat{\theta}$ θα κινηθεί εφαπτομενικά πάνω στο σύνορο του 
+$\Theta$.
+
+Η ανάλυση της ευστάθειας που προηγήθηκε, αφορούσε τη μέθοδο 
+\selectlanguage{english}Lyapunov\selectlanguage{greek} μεικτής δομής απουσία περιορισμών. Αποδεικνύεται 
+ότι η προσθήκη του διορθωτικού όρου στην (\ref{eq:lyapunov_mixed_projection}) όχι μόνο δεν επηρεάζει 
+αρνητικά την ευστάθεια του συστήματος, αλλά αντιθέτως καθιστά την παράγωγο της συνάρτησης 
+\selectlanguage{english}Lyapunov\selectlanguage{greek} πιο αρνητική. Συνεπώς, τα συμπεράσματά μας περί
+ευστάθειας μεταφέρονται αυτούσια και στην περίπτωση παρουσίας περιορισμών.
+
+Αν για την εκτίμηση των παραμέτρων επιλέγαμε την Π-δομή, το σύστημα αναγνώρισης θα ήταν
+\[
+    \dot{\hat{\mathbf{x}}} = \hat{\mathbf{A}}\hat{\mathbf{x}} + \hat{\mathbf{B}} u
+\]
+Ακολουθώντας την ίδια μεθοδολογία όπως και για την Μ-δομή, καταλήγουμε στην σχέση:
+\[
+\dot{V} = -\mathbf{e}^{\top}\mathbf{Α}\mathbf{e} 
+\]
+Για να είναι $\dot{V} \leq 0$, πρέπει ο πίνακας $\mathbf{A}$ να είναι συμμετρικός και θετικά ημιορισμένος,
+κάτι το οποίο δεν ισχύει. Συνεπώς, όταν η συνάρτηση \selectlanguage{english}Lyapunov\selectlanguage{greek}
+δίνεται από την (\ref{eq:lyapunov_function}), δεν μπορούμε να αποδείξουμε την ευστάθεια της μεθόδου 
+\selectlanguage{english}Lyapunov\selectlanguage{greek} Μ-δομής.
+
+Στο Σχήμα~\ref{fig:task1_lyapunov} φαίνεται η γραφική παράσταση της συνάρτησης 
+\selectlanguage{english}Lyapunov\selectlanguage{greek} καθώς και της παραγώγου της για βηματική είσοδο
+(αριστερά) και ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Βλέπουμε ότι και στις δύο περιπτώσεις ισχύει
+$V \geq 0, \, \dot{V} \leq 0, \forall t$ επιβεβαιώνοντας την ευστάθεια του συστήματος εκτίμησης παραμέτρων.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_lyapunov_step.pdf}
+    \caption{}
+    \label{fig:task1_lyapunov_step}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_lyapunov_sinusoidal.pdf}
+    \caption{}
+    \label{fig:task1_lyapunov_sinusoidal}
+  \end{subfigure}
+  \caption{Γραφική παράσταση της συνάρτησης \selectlanguage{english}Lyapunov\selectlanguage{greek} καθώς και
+  της παραγώγου της για α) βηματική είσοδο, β) $u(t) = 2 \sin t$}
+  \label{fig:task1_lyapunov}
+\end{figure}
+
+Στο Σχήμα~\ref{fig:task1_identification_error_step} φαίνεται το σφάλμα αναγνώρισης των δύο καταστάσεων
+για βηματική είσοδο ενώ στο Σχήμα~\ref{fig:task1_identification_error_sinusoidal} φαίνεται το σφάλμα
+αναγνώρισης των δύο καταστάσεων για είσοδο $u(t) = 2 \sin t$. Παρατηρούμε ότι και στις δύο περιπτώσεις
+τα σφάλματα συγκλίνουν στο μηδέν. Αυτό είναι αναμενόμενο καθώς έχουμε φραγμένες εισόδους οπότε σύμφωνα
+με το λήμμα \selectlanguage{english}Barbalat\selectlanguage{greek} το σφάλμα αναγνώρισης θα τείνει στο μηδέν.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{plot/task1_identification_error_step.pdf}
+    \caption{Σφάλμα αναγνώρισης για βηματική είσοδο}
+    \label{fig:task1_identification_error_step}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{plot/task1_identification_error_sinusoidal.pdf}
+    \caption{Σφάλμα αναγνώρισης για είσοδο $u(t) = 2 \sin t$}
+    \label{fig:task1_identification_error_sinusoidal}
+\end{figure}
+
+Στο Σχήμα~\ref{fig:task1_parameter_estimations} φαίνονται οι εκτιμήσεις παραμέτρων για βηματική είσοδο
+(αριστερά) και ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Βλέπουμε και στις δύο περιπτώσεις ότι
+ικανοποιείται ο περιορισμός $\hat{\alpha}_{11} \geq 1, \, \forall t$. Επίσης παρατηρούμε ότι για ημιτονοειδή
+είσοδο όλες οι εκτιμήσεις, εκτός της $\hat{\alpha}_{11}$ που κινείται στο σύνορο του $\Theta$, συγκλίνουν
+στις πραγματικές τιμές των παραμέτρων, κάτι το οποίο δεν συμβαίνει στην περίπτωση της βηματικής εισόδου.
+Αυτό συμβαίνει διότι η $u(t) = 2 \sin t$ ικανοποιεί την ΣΕΔ όπως αναλύσαμε προηγουμένως.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_parameter_estimations_step.pdf}
+    \caption{}
+    \label{fig:task1_parameter_estimations_step}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_parameter_estimations_sinusoidal.pdf}
+    \caption{}
+    \label{fig:task1_parameter_estimations_sinusoidal}
+  \end{subfigure}
+  \caption{Εκτιμήσεις παραμέτρων για α) βηματική είσοδο, β) $u(t) = 2 \sin t$}
+  \label{fig:task1_parameter_estimations}
+\end{figure}
 
 
 \subsection*{Εκτίμηση Παραμέτρων Παρουσία Σφάλματος Πόλωσης}

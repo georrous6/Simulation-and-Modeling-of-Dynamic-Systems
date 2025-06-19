@@ -1,4 +1,4 @@
-function theta_hat = lyapunov_mixed(theta_0, x_val, u_val, t, C)
+function [theta_hat, V] = lyapunov_mixed(theta_0, x_val, u_val, t, C, A, B)
     theta_0 = theta_0(:);
 
     x_hat = theta_0(1:2);
@@ -8,6 +8,7 @@ function theta_hat = lyapunov_mixed(theta_0, x_val, u_val, t, C)
     N = size(x_val, 1);
     theta_hat = zeros(N, length(theta_0));
     theta_hat(1,:) = theta_0';
+    V = NaN(N, 2);
 
     dt = diff(t);
    
@@ -37,6 +38,12 @@ function theta_hat = lyapunov_mixed(theta_0, x_val, u_val, t, C)
         x_hat = x_hat + dt(i-1) * x_hat_dot;
         A_hat = A_hat + dt(i-1) * A_hat_dot;
         B_hat = B_hat + dt(i-1) * B_hat_dot;
+
+        % Find Lyapunov function value along with its derivative
+        A_tilde = A_hat - A;
+        B_tilde = B_hat - B;
+        V(i,1) = (e' * e + trace(A_tilde' * A_tilde) + trace(B_tilde' * B_tilde)) / 2;
+        V(i,2) = -e' * C * e;
         
         theta_hat(i,1:2) = x_hat';
         theta_hat(i,3:6) = A_hat(:);

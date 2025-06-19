@@ -33,8 +33,8 @@ function projected_dot = project_theta_dot(theta_dot, theta)
         grad_i = grad_g(i,:)';
 
         % Project if constraint is active and pushing outward
-        if gi >= 0 && grad_i' * (-Gamma * theta_dot) > 0
-            correction = Gamma * grad_i * (grad_i' * Gamma * grad_i)^(-1) * grad_i' * theta_dot;
+        if gi >= 0 && grad_i' * theta_dot > 0
+            correction = Gamma * (grad_i * grad_i') / (grad_i' * Gamma * grad_i) * theta_dot;
             projected_dot = projected_dot - correction;
         end
     end
