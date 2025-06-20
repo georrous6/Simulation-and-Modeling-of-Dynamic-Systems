@@ -17,13 +17,16 @@ t = 0:1/fs:30;
 
 % Initial condition
 x0 = [0; 0];
+x_hat_0 = [0; 0];
 
-% Initial parameter estimations
-A_0 = [-1.1, 1;
-        -0.5, -4];
-B_0 = [2.5; 2];
+% Initial parameter guesses
+A_0 = [-2, 0.5; -0.5, -1.5];
+B_0 = [0; 1];
+y0 = [x0; x_hat_0; A_0(1,1); A_0(1,2); A_0(2,1); A_0(2,2); B_0];
+
+% Gains
 C = eye(2);
-theta_0 = [x0; A_0(1,1); A_0(1,2); A_0(2,1); A_0(2,2); B_0];
+Gamma = eye(6);
 
 % Input signals
 u1 = @(t) ones(size(t));
@@ -59,13 +62,14 @@ for i = 1:length(inputs)
     exportgraphics(gcf, filename, 'ContentType', 'vector');
     
     %% Estimate Parameters
-    [theta_hat, V] = lyapunov_mixed(theta_0, x, u(t), t, C, A, B);
+    [Y, V] = lyapunov_mixed(y0, u, t, A, B, C, Gamma);
     fprintf('%s Input:\n', inputNames{i});
-    disp(theta_hat(end,3:end));
+    theta_hat = Y(end,5:end);
+    disp(theta_hat);
     
     % Plot Parameter Estimations
     figure;
-    plot(t, theta_hat(:,3:end), 'LineWidth', 1.5);
+    plot(t, Y(:,5:end), 'LineWidth', 1.5);
     legend({'$\hat{\alpha}_{11}$', '$\hat{\alpha}_{12}$', ...
             '$\hat{\alpha}_{21}$', '$\hat{\alpha}_{22}$', ...
             '$\hat{b}_1$', '$\hat{b}_2$'}, 'Interpreter', 'latex');
@@ -82,7 +86,8 @@ for i = 1:length(inputs)
     figure('Position', [200, 100, 800, 400]);
     sgtitle(sprintf('Identification Error (Input: %s)', inputNames{i}));
     for j = 1:n_states
-        x_hat = theta_hat(:,1:2);
+        x = Y(:,1:2);
+        x_hat = Y(:,3:4);
         e = x - x_hat;
         subplot(1, 2, j);
         plot(t, [x(:,j), x_hat(:,j), e(:,j)], 'LineWidth', 1.5);
@@ -100,7 +105,7 @@ for i = 1:length(inputs)
 
     %% Plot Lyapunov function along with its derivative
     figure;
-    plot(V, 'LineWidth', 1.5);
+    plot(t, V, 'LineWidth', 1.5);
     xlabel('t [sec]');
     title(sprintf('Lyapunov Function and Derivative (Input: %s)', inputNames{i}));
     legend({'$V$', '$\dot{V}$'}, 'Interpreter', 'latex');

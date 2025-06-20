@@ -1,5 +1,5 @@
-function projected_dot = project_theta_dot(theta_dot, theta)
-% PROJECT_THETA_DOT Applies projection to the parameter derivative vector
+function theta_hat_dot_proj = projection(theta_hat_dot, theta_hat, Gamma)
+% PROJECT Applies projection to the parameter derivative vector
 % Inputs:
 %   theta_dot - 6x1 vector: [a11_dot; a12_dot; a21_dot; a22_dot; b1_dot; b2_dot]
 %   theta     - 6x1 vector: [a11;     a12;     a21;     a22;     b1;     b2    ]
@@ -20,22 +20,20 @@ function projected_dot = project_theta_dot(theta_dot, theta)
     ];
 
     % Constraint values
-    g = [-theta(1) - 3;
-          theta(1) + 1;
-          1 - theta(6)];
+    g = [-theta_hat(1) - 3;
+          theta_hat(1) + 1;
+          1 - theta_hat(6)];
 
-    Gamma = eye(6);  % Adaptation gain (identity for simplicity)
-
-    projected_dot = theta_dot;
+    theta_hat_dot_proj = theta_hat_dot;
 
     for i = 1:length(g)
         gi = g(i);
         grad_i = grad_g(i,:)';
 
         % Project if constraint is active and pushing outward
-        if gi >= 0 && grad_i' * theta_dot > 0
-            correction = Gamma * (grad_i * grad_i') / (grad_i' * Gamma * grad_i) * theta_dot;
-            projected_dot = projected_dot - correction;
+        if gi >= 0 && grad_i' * theta_hat_dot > 0
+            correction = Gamma * (grad_i * grad_i') / (grad_i' * Gamma * grad_i) * theta_hat_dot;
+            theta_hat_dot_proj = theta_hat_dot_proj - correction;
         end
     end
 end
