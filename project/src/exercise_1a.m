@@ -1,5 +1,7 @@
 clc, clearvars, close all;
 
+addpath('utils');
+
 outputDir = fullfile('..', 'plot');
 if ~exist(outputDir, 'dir')
     mkdir(outputDir);

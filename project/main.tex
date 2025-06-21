@@ -28,6 +28,7 @@
 Σε αυτό το μέρος μελετάται ένα γραμμικό δυναμικό σύστημα δεύτερης τάξης της μορφής:
 \begin{equation}
 \dot{\mathbf{x}}(t) = \mathbf{A} \mathbf{x}(t) + \mathbf{B} u(t),
+\label{eq:state_space_form}
 \end{equation}
 όπου $\mathbf{x}(t) \in \mathbb{R}^2$ είναι το διάνυσμα των καταστάσεων, και $u(t) \in \mathbb{R}$ 
 η είσοδος του συστήματος. Οι πίνακες $\mathbf{A} \in \mathbb{R}^{2 \times 2}$ και 
@@ -66,13 +67,13 @@ $\mathbf{A}, \, \mathbf{B}$, πρέπει να επιλέξουμε το είδ�
 ζώνης του συστήματος. Ωστόσο, επειδή το μοντέλο μας υπάγεται στην κατηγορία ``γκρι κουτί'', 
 η εκ των προτέρων γνώση μας για το σύστημα δεν επαρκεί για τον άμεσο υπολογισμό του εύρους ζώνης.
 
-\subsubsection*{Επιλογή Συχνότητας Δειγματολειψίας}
+\subsubsection*{Επιλογή συχνότητας δειγματολειψίας}
 
 Εφαρμόζουμε βηματική είσοδο στο σύστημα ώστε να εκτιμήσουμε την κυρίαρχη σταθερά χρόνου  
 και να αποκτήσουμε μία πρώτη εικόνα για τη δυναμική του. Η βηματική απόκριση του συστήματος  
 παρουσιάζεται στο Σχήμα~\ref{fig:task1_step_response} για συχνότητα δειγματοληψίας $f_s = 1$
 \selectlanguage{english}kHz\selectlanguage{greek}. Η $f_s$ επιλέχθηκε αυθαίρετα ως μία υψηλή τιμή, 
-επαρκής για να αποτυπώσει επαρκώς τη δυναμική του συστήματος.
+επαρκής για να αποτυπώσει τη δυναμική του συστήματος.
 
 Από το σχήμα είναι εμφανές ότι η απόκριση της κατάστασης $x_2(t)$ είναι ταχύτερη αυτής της $x_1(t)$,
 συνεπώς η σταθερά χρόνου του συστήματος θα προσδιοριστεί μέσω της $x_2(t)$. Στην απόκριση της
@@ -105,7 +106,7 @@ $x_2(t)$ δεν παρατηρείται υπερύψωση, άρα ο χρόν�
   \label{fig:task1_response}
 \end{figure}
 
-\subsubsection*{Επιλογή Εισόδου}
+\subsubsection*{Επιλογή εισόδου}
 
 Για να αποτυπωθεί πλήρως η δυναμική του συστήματος, είναι σημαντικό η είσοδος να περιέχει αρκετές
 συχνότητες ώστε να διεγείρει όλους τους ρυθμούς του συστήματος. Επίσης, με κατάλληλη επιλογή της
@@ -115,9 +116,10 @@ $x_2(t)$ δεν παρατηρείται υπερύψωση, άρα ο χρόν�
 
 Το γραμμικό μας σύστημα είναι τάξεως $n=2$. Για να ικανοποιεί η είσοδός μας $u$ μία ΣΕΔ πρέπει
 να περιέχει τουλάχιστον $m = \left\lceil \frac{n}{2} \right\rceil$ διακριτές συχνότητες και τότε
-το σήμα $u$ λέγεται επιμένουσα διέγερση τάξεως $n$. Στην ανάλυσή μας παρακάτω επιλέγουμε $u(t) = 2 \sin t$.
+το σήμα $u$ λέγεται επιμένουσα διέγερση τάξεως $n$. Στην ανάλυσή μας παρακάτω χρησιμοποιούμε ως είσοδο
+την $u(t) = 2 \sin t$.
 
-\subsubsection*{Σχεδίαση Αλγορίθμου Πραγματικού Χρόνου}
+\subsubsection*{Μέθοδος \selectlanguage{english}Lyapunov\selectlanguage{greek} με προβολή}
 Λόγω της εκ των προτέρων γνώσης που έχουμε για το επιτρεπτό εύρος τιμών ορισμένων παραμέτρων, 
 ο χώρος αναζήτησης $\Theta$ των παραμέτρων του μοντέλου θα περιορίζεται σε ένα υποσύνολο του $\mathbb{R}^n$.
 Θα χρησιμοποιήσουμε κάποιο αναδρομικό αλγόριθμο προβολής ο οποίος εξασφαλίζει ότι οι εκτιμήσεις των
@@ -140,6 +142,8 @@ $\mathbf{e} = \mathbf{x} - \hat{\mathbf{x}}$
     \dot{\mathbf{e}} = -\tilde{\mathbf{A}}\mathbf{x} - \tilde{\mathbf{B}}u - \mathbf{C}\mathbf{e}
     \label{eq:lyapunov_mixed_identification_error_derivative}
 \end{equation}
+όπου $\tilde{\mathbf{A}} = \hat{\mathbf{A}} - \mathbf{A}$,
+$\tilde{\mathbf{B}} = \hat{\mathbf{B}} - \mathbf{B}$ τα παραμετρικά σφάλματα.
 Ως συνάρτηση \selectlanguage{english}Lyapunov\selectlanguage{greek} επιλέγεται η:
 \begin{equation}
     V = \frac{1}{2}\mathbf{e}^{\top}\mathbf{e} + 
@@ -186,7 +190,7 @@ $k > 0$ το κέρδος. Η επιλογή του $k$ έγινε με τη μ�
 \[
 \hat{\theta} =
 \begin{bmatrix}
-    \hat{\alpha}_{11} & \hat{\alpha}_{21} & \hat{\alpha}_{12} & \hat{\alpha}_{22} & \hat{b}_1 & \hat{b}_2
+    \hat{\alpha}_{11} & \hat{\alpha}_{12} & \hat{\alpha}_{21} & \hat{\alpha}_{22} & \hat{b}_1 & \hat{b}_2
 \end{bmatrix}^{\top}
 \]
 το διάνυσμα των εκτιμήσεων των παραμέτρων που προκύπτει από το σύστημα (\ref{eq:lyapunov_mixed_identification_system}), (\ref{eq:lyapunov_mixed_update_formula}). 
@@ -279,9 +283,10 @@ $\Theta$.
 \selectlanguage{english}Lyapunov\selectlanguage{greek} Μ-δομής.
 
 Στο Σχήμα~\ref{fig:task1_lyapunov} φαίνεται η γραφική παράσταση της συνάρτησης 
-\selectlanguage{english}Lyapunov\selectlanguage{greek} καθώς και της παραγώγου της για βηματική είσοδο
-(αριστερά) και ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Βλέπουμε ότι και στις δύο περιπτώσεις ισχύει
-$V \geq 0, \, \dot{V} \leq 0, \forall t$ επιβεβαιώνοντας την ευστάθεια του συστήματος εκτίμησης παραμέτρων.
+\selectlanguage{english}Lyapunov\selectlanguage{greek} καθώς και της παραγώγου της, για βηματική είσοδο 
+(αριστερά) και ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Παρατηρούμε ότι και στις δύο περιπτώσεις 
+ισχύει $V \geq 0, \, \dot{V} \leq 0, \forall t$, γεγονός που επιβεβαιώνει την ευστάθεια του συστήματος 
+εκτίμησης παραμέτρων.
 
 \begin{figure}[htbp]
   \centering
@@ -303,11 +308,11 @@ $V \geq 0, \, \dot{V} \leq 0, \forall t$ επιβεβαιώνοντας την �
   \label{fig:task1_lyapunov}
 \end{figure}
 
-Στο Σχήμα~\ref{fig:task1_identification_error_step} φαίνεται το σφάλμα αναγνώρισης των δύο καταστάσεων
-για βηματική είσοδο ενώ στο Σχήμα~\ref{fig:task1_identification_error_sinusoidal} φαίνεται το σφάλμα
-αναγνώρισης των δύο καταστάσεων για είσοδο $u(t) = 2 \sin t$. Παρατηρούμε ότι και στις δύο περιπτώσεις
-τα σφάλματα συγκλίνουν στο μηδέν. Αυτό είναι αναμενόμενο καθώς έχουμε φραγμένες εισόδους οπότε σύμφωνα
-με το λήμμα \selectlanguage{english}Barbalat\selectlanguage{greek} το σφάλμα αναγνώρισης θα τείνει στο μηδέν.
+Στο Σχήμα~\ref{fig:task1_identification_error_step} παρουσιάζεται το σφάλμα αναγνώρισης των δύο καταστάσεων 
+για βηματική είσοδο, ενώ στο Σχήμα~\ref{fig:task1_identification_error_sinusoidal} απεικονίζεται το αντίστοιχο 
+σφάλμα για είσοδο $u(t) = 2 \sin t$. Παρατηρούμε ότι και στις δύο περιπτώσεις τα σφάλματα συγκλίνουν στο μηδέν. 
+Αυτό είναι αναμενόμενο, καθώς οι είσοδοι είναι φραγμένες και, σύμφωνα με το λήμμα 
+\selectlanguage{english}Barbalat\selectlanguage{greek}, το σφάλμα αναγνώρισης τείνει στο μηδέν.
 
 \begin{figure}
     \centering
@@ -323,12 +328,12 @@ $V \geq 0, \, \dot{V} \leq 0, \forall t$ επιβεβαιώνοντας την �
     \label{fig:task1_identification_error_sinusoidal}
 \end{figure}
 
-Στο Σχήμα~\ref{fig:task1_parameter_estimations} φαίνονται οι εκτιμήσεις παραμέτρων για βηματική είσοδο
-(αριστερά) και ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Βλέπουμε και στις δύο περιπτώσεις ότι
-ικανοποιείται ο περιορισμός $\hat{\alpha}_{11} \geq 1, \, \forall t$. Επίσης παρατηρούμε ότι για ημιτονοειδή
-είσοδο όλες οι εκτιμήσεις, εκτός της $\hat{\alpha}_{11}$ που κινείται στο σύνορο του $\Theta$, συγκλίνουν
-στις πραγματικές τιμές των παραμέτρων, κάτι το οποίο δεν συμβαίνει στην περίπτωση της βηματικής εισόδου.
-Αυτό συμβαίνει διότι η $u(t) = 2 \sin t$ ικανοποιεί την ΣΕΔ όπως αναλύσαμε προηγουμένως.
+Στο Σχήμα~\ref{fig:task1_parameter_estimations} παρουσιάζονται οι εκτιμήσεις των παραμέτρων για βηματική είσοδο 
+(αριστερά) και για ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Παρατηρούμε ότι και στις δύο περιπτώσεις 
+ικανοποιούνται οι περιορισμοί $-3 \leq \hat{\alpha}_{11} \leq -1, \, b_2 \geq 1, \, \forall t$. 
+Επιπλέον, για την ημιτονοειδή είσοδο όλες οι εκτιμήσεις συγκλίνουν στις πραγματικές τιμές των παραμέτρων, 
+σε αντίθεση με την περίπτωση της βηματικής εισόδου. Αυτό οφείλεται στο γεγονός ότι η $u(t) = 2 \sin t$ 
+ικανοποιεί τη ΣΕΔ, όπως αναλύθηκε προηγουμένως.
 
 \begin{figure}[htbp]
   \centering
@@ -351,6 +356,143 @@ $V \geq 0, \, \dot{V} \leq 0, \forall t$ επιβεβαιώνοντας την �
 
 
 \subsection*{Εκτίμηση Παραμέτρων Παρουσία Σφάλματος Πόλωσης}
+Θεωρούμε τώρα ότι στο σύστημά μας υπάρχει σφάλμα πόλωσης $\omega \in \mathbb{R}^2$ που να ικανοποιεί
+$||\omega(t)|| \leq \bar{\omega}, \forall t \geq 0$, για κάποια άγνωστη σταθερά $\bar{\omega} > 0$.
+Τα σφάλματα πόλωσης αποτελούν σταθερές ή αργά μεταβαλλόμενες διαταραχές που οφείλονται στην εσφαλμένη 
+επιλογή της δομής του μοντέλου. Στην παρακάτω ανάλυση το σφάλμα πόλωσης μοντελοποιείται ως:
+\begin{equation}
+    \omega(t) = 
+    \begin{bmatrix}
+        \omega_1(t) \\
+        \omega_2(t)
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \bar{\omega} \sin(2 \pi f_w t) \\
+        \bar{\omega} \cos(2 \pi f_w t)
+    \end{bmatrix}, \quad t \geq 0
+    \label{eq:bias_error}
+\end{equation}
+όπου $f_w << f_n$ με $f_n = \frac{\omega_n}{2 \pi}$ τη φυσική συχνότητα του συστήματος.
+
+Παρουσία σφάλματος πόλωσης, οι κλασικές μέθοδοι εκτίμησης παραμέτρων πραγματικού χρόνου διασφαλίζουν ότι 
+το σφάλμα αναγνώρισης $e$ παραμένει φραγμένο, δηλαδή $||e|| \leq \bar{\omega}$. Ωστόσο, η εκτίμηση των
+παραμέτρων $\hat{\theta}$ ενδέχεται να αποκλίνει σημαντικά από τις πραγματικές τιμές $\theta^*$, 
+οδηγώντας σε παραμετρικό σφάλμα $||\tilde{\theta}|| = ||\hat{\theta} - \theta|| \to \infty$.
+
+Ένας τρόπος αντιμετώπισης της απόκλισης αυτής είναι η χρήση της μεθόδου προβολής, η οποία περιορίζει το 
+διάνυσμα εκτίμησης εντός ενός κυρτού συνόλου $\Theta$, υπό την προϋπόθεση ότι $\theta^* \in \Theta$. 
+Με αυτόν τον τρόπο διασφαλίζεται ότι $\hat{\theta} \in \Theta, \forall t \ge 0$, αποφεύγοντας την περίπτωση 
+όπου $\hat{\theta} \to \infty$ δηλαδή την \textit{παραμετρική ολίσθηση}.
+
+Αντί της μεθόδου προβολής, θα χρησιμοποιήσουμε έναν εύρωστο αλγόριθμο εκτίμησης παραμέτρων: 
+τη μέθοδο κλίσης με διακοπτική $\sigma$-τροποποίηση.
+
+\subsubsection*{Mέθοδος κλίσης με διακοπτική $\sigma$-τροποποίηση}
+
+Θα φέρουμε το σύστημα της σχέσης (\ref{eq:state_space_form}) στην ισοδύναμη γραμμική παραμετροποιήσιμη 
+μορφή. Από την πρώτη εξίσωση κατάστασης έχουμε:
+\begin{equation}
+    \dot{x}_1 = \alpha_{11} x_1 + \alpha_{12} x_2 + b_1 u
+    \label{eq:linearly_parametrized_form_1}
+\end{equation}
+Εφόσον το $\dot{x}_1$ δεν είναι μετρήσιμο, χρησιμοποιούμε την προσέγγιση $\dot{x}_1 = s x_1$, οπότε η
+(\ref{eq:linearly_parametrized_form_1}) γίνεται:
+\begin{equation}
+    \begin{aligned}
+        &s x_1 = \alpha_{11} x_1 + \alpha_{12} x_2 + b_1 u \Rightarrow \\ 
+        &(s - \alpha_{11}) x_1 = \alpha_{12} x_2 + b_1 u
+    \end{aligned}
+    \label{eq:linearly_parametrized_form_2}
+\end{equation}
+Φιλτράροντας τα δύο μέλη της (\ref{eq:linearly_parametrized_form_2}) με ευσταθές φίλτρο 1ης τάξης
+$\Lambda(s) = s + \lambda, \, \lambda > 0$ παίρνουμε:
+\begin{equation*}
+    \begin{aligned}
+        &\frac{s - \alpha_{11}}{\Lambda(s)} x_1 = \alpha_{12} \frac{x_2}{\Lambda(s)} + 
+        b_1 \frac{u}{\Lambda(s)} \Rightarrow \\
+        &\frac{\Lambda(s) - \lambda - \alpha_{11}}{\Lambda(s)} x_1 = \alpha_{12} \frac{x_2}{\Lambda(s)} + 
+        b_1 \frac{u}{\Lambda(s)} \Rightarrow \\
+        &\left(1 - \frac{\lambda + \alpha_{11}}{\Lambda(s)}\right) x_1 = \alpha_{12} \frac{x_2}{\Lambda(s)} + 
+        b_1 \frac{u}{\Lambda(s)} \Rightarrow \\
+        &x_1 = (\lambda + \alpha_{11})\frac{x_1}{\Lambda(s)} + \alpha_{12} \frac{x_2}{\Lambda(s)} + 
+        b_1 \frac{u}{\Lambda(s)} \Rightarrow \\
+        x_1 &=
+        \begin{bmatrix}
+            \lambda + \alpha_{11} & \alpha_{12} & b_1
+        \end{bmatrix} \cdot
+        \begin{bmatrix}
+            \frac{x_1}{\Lambda(s)} & \frac{x_2}{\Lambda(s)} & \frac{u}{\Lambda(s)}
+        \end{bmatrix}^{\top} \Rightarrow \\
+        x_1 &= {\theta_1^*}^{\top} \phi
+    \end{aligned} 
+\end{equation*}
+όπου
+\begin{equation}
+    \phi = 
+    \begin{bmatrix}
+        \frac{x_1}{\Lambda(s)} & \frac{x_2}{\Lambda(s)} & \frac{u}{\Lambda(s)}
+    \end{bmatrix}^{\top}
+    \label{eq:regresson_vector}
+\end{equation}
+το μετρήσιμο διάνυσμα οπισθοδρόμησης και
+\begin{equation}
+    \theta_1^* = 
+    \begin{bmatrix}
+        \lambda + \alpha_{11} & \alpha_{12} & b_1
+    \end{bmatrix}^{\top}
+    \label{eq:theta_star_1}
+\end{equation}
+το άγνωστο σταθερό διάνυσμα που εμπεριέχει τις πραγματικές τιμές των παραμέτρων προς εκτίμηση.
+
+Εργαζόμενοι αντίστοιχα και για τη δεύτερη εξίσωση κατάστασης, καταλήγουμε στη γραμμικά 
+παραμετροποιήσιμη μορφή:
+\[
+    x_2 = {\theta_2^*}^{\top} \phi
+\]
+με
+\begin{equation}
+    \theta_2^* = 
+    \begin{bmatrix}
+        \alpha_{21} & \lambda + \alpha_{22} & b_2
+    \end{bmatrix}^{\top}
+    \label{eq:theta_star_2}
+\end{equation}
+
+Οι εκτιμήσεις $\hat{\theta}_1, \, \hat{\theta}_2$ των $\theta_1^*, \, \theta_2^*$ της μεθόδου κλίσης με διακοπτική $\sigma$-τροποποίηση (στη συνεχή της μορφή) δίνονται από τη λύση του συστήματος:
+\begin{equation}
+    \begin{aligned}
+    x_i &= {\theta_i^*}^{\top} \phi + \omega_i, \quad |\theta_i^*| \leq M \\
+    \hat{x}_i &= \hat{\theta}_i \phi \\
+    \dot{\hat{\theta}}_i &= - \gamma \sigma_{\delta}(\hat{\theta}_i) \hat{\theta}_i + 
+    \gamma e_i \phi, \quad \gamma > 0 \\
+    e_i &= x_i - \hat{x}_i
+    \end{aligned}, \quad i = 1, 2
+    \label{eq:gradient_switching_sigma_modification}
+\end{equation}
+όπου τα σφάλματα πόλωσης $\omega_i$ δίνονται από την (\ref{eq:bias_error}), $\hat{\theta}_i$ η εκτίμηση
+του $\theta_i^*$, $M, \, \bar{\sigma}, \, \gamma > 0$ σχεδιαστικές σταθερές και
+\begin{equation*}
+    \sigma_{\delta}(\hat{\theta}) = 
+    \left\{
+    \begin{aligned}
+        0&, \quad \texttt{αν } ||\hat{\theta}|| < M \\
+        \bar{\sigma}\left(\frac{||\hat{\theta}||}{M} - 1\right)&, 
+        \quad \texttt{αν } M \leq ||\hat{\theta}|| \leq 2M \\
+        \bar{\sigma}&, \quad \texttt{αν } ||\hat{\theta}|| > 2M
+    \end{aligned}, \quad \bar{\sigma} > 0
+    \right.
+\end{equation*}
+
+Οι παράμετροι $M, \, \bar{\sigma}, \, \gamma > 0$ επιλέχθηκαν με τη μέθοδο
+\selectlanguage{english}trial and error\selectlanguage{greek}.
+Ειδικότερα, το $M$ επιλέγεται ώστε να ισχύει η απαίτηση $|\theta_i^*| \leq M$. Όσο πιο μεγάλο είναι το $M$,
+τόσο ``καθιστερεί'' η εφαρμογή της $\sigma$-τρποποίησης, άρα τόσο επιτρέπεται στο $\hat{\theta}_i$ να ολισθήσει
+σε μεγαλύτερες τιμές μέχρι να ``ενεργοποιηθεί'' η $\sigma$-τρποποίηση. Ο συντελεστής $\gamma$ ελέγχει την 
+ταχύτητα σύγκλισης του $\hat{x}_i(t)$ στο $x_i(t)$. Αυξάνοντας την τιμή του $\gamma$ επιτυγχάνεται ταχύτερη
+σύγκλιση. Πολύ μεγάλες τιμές του $\gamma$ όμως καθιστούν το σύστημά μας ``άκαμπτο''. Τέλος, η παράμετρος
+$\bar{\sigma}$ ορίζει το πόσο βίαια ``τραβάει'' η μέθοδος τις εκτιμήσεις των παραμέτρων όταν απομακρύνονται 
+από το κατώφλι $M$.
+
 
 
 \end{document}
