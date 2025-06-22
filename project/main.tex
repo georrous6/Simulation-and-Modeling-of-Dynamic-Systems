@@ -41,7 +41,7 @@ $\mathbf{B} \in \mathbb{R}^{2 \times 1}$ είναι άγνωστοι αλλά σ
 Σκοπός είναι η ανάπτυξη και ανάλυση ενός αλγορίθμου πραγματικού χρόνου για την εκτίμηση  
 $\hat{\mathbf{A}},\,\hat{\mathbf{B}}$ των πινάκων $A$ και $B$, με δεδομένο ότι τόσο η είσοδος 
 $u(t)$ όσο και το διάνυσμα καταστάσεων $\mathbf{x}(t)$ είναι μετρήσιμα. Για τη σχεδίαση του 
-αλγορίθμου, αρχικά υποθέτουμε ότι δεν υπάρχουν διαταραχές στις μετρήσεις των καταστάσεων του 
+αλγορίθμου, αρχικά υποθέτουμε ότι δεν υπάρχει σφάλμα μοντελοποίησης που οφείλεται στην μορφή του 
 συστήματος. Στη συνέχεια, εισάγεται στο σύστημα σφάλμα πόλωσης και επανασχεδιάζεται ο αλγόριθμος, 
 με στόχο τη μελέτη της επίδρασης του σφάλματος στην ακρίβεια των εκτιμήσεων. Για σκοπούς 
 προσομοίωσης, χρησιμοποιούνται ως πραγματικές τιμές οι παρακάτω πίνακες:
@@ -269,19 +269,6 @@ $\Theta$.
 \selectlanguage{english}Lyapunov\selectlanguage{greek} πιο αρνητική. Συνεπώς, τα συμπεράσματά μας περί
 ευστάθειας μεταφέρονται αυτούσια και στην περίπτωση παρουσίας περιορισμών.
 
-Αν για την εκτίμηση των παραμέτρων επιλέγαμε την Π-δομή, το σύστημα αναγνώρισης θα ήταν
-\[
-    \dot{\hat{\mathbf{x}}} = \hat{\mathbf{A}}\hat{\mathbf{x}} + \hat{\mathbf{B}} u
-\]
-Ακολουθώντας την ίδια μεθοδολογία όπως και για την Μ-δομή, καταλήγουμε στην σχέση:
-\[
-\dot{V} = -\mathbf{e}^{\top}\mathbf{Α}\mathbf{e} 
-\]
-Για να είναι $\dot{V} \leq 0$, πρέπει ο πίνακας $\mathbf{A}$ να είναι συμμετρικός και θετικά ημιορισμένος,
-κάτι το οποίο δεν ισχύει. Συνεπώς, όταν η συνάρτηση \selectlanguage{english}Lyapunov\selectlanguage{greek}
-δίνεται από την (\ref{eq:lyapunov_function}), δεν μπορούμε να αποδείξουμε την ευστάθεια της μεθόδου 
-\selectlanguage{english}Lyapunov\selectlanguage{greek} Μ-δομής.
-
 Στο Σχήμα~\ref{fig:task1_lyapunov} φαίνεται η γραφική παράσταση της συνάρτησης 
 \selectlanguage{english}Lyapunov\selectlanguage{greek} καθώς και της παραγώγου της, για βηματική είσοδο 
 (αριστερά) και ημιτονοειδή είσοδο $u(t) = 2 \sin t$ (δεξιά). Παρατηρούμε ότι και στις δύο περιπτώσεις 
@@ -387,7 +374,7 @@ $||\omega(t)|| \leq \bar{\omega}, \forall t \geq 0$, για κάποια άγν�
 Αντί της μεθόδου προβολής, θα χρησιμοποιήσουμε έναν εύρωστο αλγόριθμο εκτίμησης παραμέτρων: 
 τη μέθοδο κλίσης με διακοπτική $\sigma$-τροποποίηση.
 
-\subsubsection*{Mέθοδος κλίσης με διακοπτική $\sigma$-τροποποίηση}
+\subsubsection*{Μέθοδος κλίσης με διακοπτική $\sigma$-τροποποίηση}
 
 Θα φέρουμε το σύστημα της σχέσης (\ref{eq:state_space_form}) στην ισοδύναμη γραμμική παραμετροποιήσιμη 
 μορφή. Από την πρώτη εξίσωση κατάστασης έχουμε:
@@ -458,7 +445,8 @@ $\Lambda(s) = s + \lambda, \, \lambda > 0$ παίρνουμε:
     \label{eq:theta_star_2}
 \end{equation}
 
-Οι εκτιμήσεις $\hat{\theta}_1, \, \hat{\theta}_2$ των $\theta_1^*, \, \theta_2^*$ της μεθόδου κλίσης με διακοπτική $\sigma$-τροποποίηση (στη συνεχή της μορφή) δίνονται από τη λύση του συστήματος:
+Οι εκτιμήσεις $\hat{\theta}_1, \, \hat{\theta}_2$ των $\theta_1^*, \, \theta_2^*$ της μεθόδου κλίσης με
+διακοπτική $\sigma$-τροποποίηση (στη συνεχή της μορφή) δίνονται από τη λύση του συστήματος:
 \begin{equation}
     \begin{aligned}
     x_i &= {\theta_i^*}^{\top} \phi + \omega_i, \quad |\theta_i^*| \leq M \\
@@ -483,16 +471,84 @@ $\Lambda(s) = s + \lambda, \, \lambda > 0$ παίρνουμε:
     \right.
 \end{equation*}
 
-Οι παράμετροι $M, \, \bar{\sigma}, \, \gamma > 0$ επιλέχθηκαν με τη μέθοδο
+Αποδεικνύεται ότι η διακοπτική $\sigma$-τροποποίηση λύνει το πρόβλημα της παραμετρικής ολίσθησης, 
+ενώ το σφάλμα αναγνώρισης συγκλίνει στο μηδέν. Ειδικότερα, για την βαθμωτή περίπτωση το παραμετρικό 
+σφάλμα $\tilde{\theta} = \hat{\theta} - \theta^*$ συγκλίνει εκθετικά με ρυθμό 
+$\alpha, \,0 \leq \alpha \leq \sigma_s \gamma $ στο σύνολο $\Theta$, όπου:
+\begin{equation}
+    \Theta = \left\{ \tilde{\theta} \in \mathbb{R}: \quad |\tilde{\theta}|^2 \leq 
+    \frac{\gamma}{\alpha}\left(\bar{\omega}^2 + \sigma_s |\theta^*|^2\right)\right\}
+    \label{eq:switching_sigma_parameter_estimation_bound}
+\end{equation}
+
+Από τη σχέση (\ref{eq:switching_sigma_parameter_estimation_bound}) προκύπτουν ορισμένα ιδιαίτερα 
+χρήσιμα συμπεράσματα, τα οποία γενικεύονται και στην περίπτωση όπου το $\theta^*$ είναι διάνυσμα. 
+Πρώτον, το άνω φράγμα του $|\tilde{\theta}|^2$ αυξάνεται με το πλάτος του σφάλματος πόλωσης 
+$\bar{\omega}$. Το γεγονός αυτό επιβεβαιώνεται και από το Σχήμα~\ref{fig:task1_mse_vs_bias_error_amplitude},
+στο οποίο παρατηρούμε ότι το μέσο τετραγωνικό σφάλμα 
+(\selectlanguage{english}Mean Squared Error -- MSE\selectlanguage{greek}) των εκτιμήσεων των παραμέτρων 
+αυξάνεται όσο αυξάνεται το $\bar{\omega}$. Αντίστοιχη είναι και η επίδραση της παραμέτρου $\gamma$ ως 
+προς τη μέγιστη τιμή του παραμετρικού σφάλματος, όπως εύκολα διαπιστώνουμε από την
+(\ref{eq:switching_sigma_parameter_estimation_bound}). Πράγματι, από το 
+Σχήμα~\ref{fig:task1_mse_vs_gamma_gain}, φαίνεται ότι το \selectlanguage{english}MSE\selectlanguage{greek} 
+των εκτιμήσεων των παραμέτρων αυξάνεται καθώς αυξάνεται η τιμή του $\gamma$.
+
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_mse_vs_bias_error_amplitude.pdf}
+    \caption{}
+    \label{fig:task1_mse_vs_bias_error_amplitude}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{plot/task1_mse_vs_gamma_gain.pdf}
+    \caption{}
+    \label{fig:task1_mse_vs_gamma_gain}
+  \end{subfigure}
+  \caption{Γραφική παράσταση του \selectlanguage{english}MSE\selectlanguage{greek} των εκτιμήσεων των
+    παραμέτρων ως προς α) το πλάτος του θορύβου $\bar{\omega}$ β) το κέρδος $\gamma$}
+  \label{fig:task1_mse_vs_design_parameters}
+\end{figure}
+
+Οι σχεδιαστικές σταθερές $M, \, \bar{\sigma}, \, \gamma > 0$ επιλέχθηκαν με τη μέθοδο
 \selectlanguage{english}trial and error\selectlanguage{greek}.
 Ειδικότερα, το $M$ επιλέγεται ώστε να ισχύει η απαίτηση $|\theta_i^*| \leq M$. Όσο πιο μεγάλο είναι το $M$,
-τόσο ``καθιστερεί'' η εφαρμογή της $\sigma$-τρποποίησης, άρα τόσο επιτρέπεται στο $\hat{\theta}_i$ να ολισθήσει
-σε μεγαλύτερες τιμές μέχρι να ``ενεργοποιηθεί'' η $\sigma$-τρποποίηση. Ο συντελεστής $\gamma$ ελέγχει την 
-ταχύτητα σύγκλισης του $\hat{x}_i(t)$ στο $x_i(t)$. Αυξάνοντας την τιμή του $\gamma$ επιτυγχάνεται ταχύτερη
-σύγκλιση. Πολύ μεγάλες τιμές του $\gamma$ όμως καθιστούν το σύστημά μας ``άκαμπτο''. Τέλος, η παράμετρος
-$\bar{\sigma}$ ορίζει το πόσο βίαια ``τραβάει'' η μέθοδος τις εκτιμήσεις των παραμέτρων όταν απομακρύνονται 
-από το κατώφλι $M$.
+τόσο ``καθυστερεί'' η εφαρμογή της $\sigma$-τροποποίησης, άρα τόσο επιτρέπεται στο $\hat{\theta}_i$ να ολισθήσει
+σε μεγαλύτερες τιμές μέχρι να ``ενεργοποιηθεί'' η $\sigma$-τροποποίηση. Ο συντελεστής $\gamma$ ελέγχει 
+-- πέρα από το μέγιστο παραμετρικό σφάλμα, όπως ήδη έχουμε αναφέρει -- την ταχύτητα σύγκλισης του 
+$\hat{x}_i(t)$ στο $x_i(t)$. Αυξάνοντας την τιμή του $\gamma$ επιτυγχάνεται ταχύτερη σύγκλιση. Πολύ μεγάλες 
+τιμές του $\gamma$ όμως καθιστούν το σύστημά μας ``άκαμπτο''. Τέλος, η παράμετρος $\bar{\sigma}$ ορίζει το 
+πόσο βίαια ``τραβάει'' η μέθοδος τις εκτιμήσεις των παραμέτρων όταν απομακρύνονται από το κατώφλι $M$. Τελικά
+επιλέγουμε $M = 10, \, \bar{\sigma} = 5, \, \gamma = 10$.
 
+Στο Σχήμα~\ref{fig:task1_gradient_parameter_estimations} παρουσιάζονται οι εκτιμήσεις των παραμέτρων για 
+την προαναφερθείσα επιλογή των σχεδιαστικών σταθερών. Παρατηρείται ότι οι εκτιμήσεις εμφανίζουν ταλαντώσεις
+πεπερασμένου πλάτους γύρω από τις πραγματικές τιμές των παραμέτρων. Το φαινόμενο αυτό συνάδει με τα 
+συμπεράσματα που προέκυψαν από τη σχέση (\ref{eq:switching_sigma_parameter_estimation_bound}), σύμφωνα με 
+την οποία το παραμετρικό σφάλμα παραμένει φραγμένο.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{plot/task1_gradient_parameter_estimations.pdf}
+    \caption{Εκτιμήσεις παραμέτρων της μεθόδου κλίσης με διακοπτική $\sigma$-τροποποίηση}
+    \label{fig:task1_gradient_parameter_estimations}
+\end{figure}
+
+Τέλος, στο Σχήμα~\ref{fig:task1_gradient_identification_error} φαίνεται το σφάλμα αναγνώρισης των δύο 
+καταστάσεων του συστήματος.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{plot/task1_gradient_identification_error.pdf}
+    \caption{Σφάλματα αναγνώρισης της μεθόδου κλίσης με διακοπτική $\sigma$-τροποποίηση}
+    \label{fig:task1_gradient_identification_error}
+\end{figure}
+
+\section{Θέμα 2}
 
 
 \end{document}

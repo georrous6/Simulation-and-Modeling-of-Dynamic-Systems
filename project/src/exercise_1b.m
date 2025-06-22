@@ -57,17 +57,17 @@ filename = fullfile(outputDir, 'task1_gradient_parameter_estimations.pdf');
 exportgraphics(gcf, filename, 'ContentType', 'vector');
 
 
-%% Plot Biased Identification Error
+%% Plot Identification Error
 n_states = size(x, 2);
-x_biased = Y(:,1:2);
+x_measured = Y(:,1:2);
 x_hat = Y(:,3:4);
-e_biased = x_biased - x_hat;
+e = x_measured - x_hat;
 
 figure('Position', [200, 100, 800, 400]);
-sgtitle('Biased Identification Error');
+sgtitle('Identification Error');
 for j = 1:n_states
     subplot(1, 2, j);
-    plot(t, [x_biased(:,j), x_hat(:,j), e_biased(:,j)], 'LineWidth', 1.5);
+    plot(t, [x_measured(:,j), x_hat(:,j), e(:,j)], 'LineWidth', 1.5);
     legend({sprintf('$x_%d$', j), ...
             sprintf('$\\hat{x}_%d$', j), ...
             sprintf('$e_%d$', j)}, 'Interpreter', 'latex');
@@ -96,9 +96,28 @@ end
 figure;
 plot(omega_bar_values, mse_values, 'LineWidth', 1.5);
 xlabel('$\bar{\omega}$', 'Interpreter', 'latex');
-ylabel('RMSE');
+ylabel('MSE');
 title('Parameter Estimation MSE vs Bias Error Amplitude');
 grid on;
 
 filename = fullfile(outputDir, 'task1_mse_vs_bias_error_amplitude.pdf');
+exportgraphics(gcf, filename, 'ContentType', 'vector');
+
+%% Plot Parameter Estimation MSE vs Sigma Modification Gain
+gamma_values = linspace(0.1, 10, n_values);
+for i = 1:n_values
+    gamma = gamma_values(i);
+    Y = gradient_descend(t, x, u(t), lambda, gamma, M, sigma_bar, omegafun, A, B, A_0, B_0);
+    theta_hat = Y(:,5:end);
+    mse_values(i,:) = mean((theta_hat - theta_star).^2);
+end
+
+figure;
+plot(gamma_values, mse_values, 'LineWidth', 1.5);
+xlabel('$\gamma$', 'Interpreter', 'latex');
+ylabel('MSE');
+title('Parameter Estimation MSE vs Gamma Gain');
+grid on;
+
+filename = fullfile(outputDir, 'task1_mse_vs_gamma_gain.pdf');
 exportgraphics(gcf, filename, 'ContentType', 'vector');
