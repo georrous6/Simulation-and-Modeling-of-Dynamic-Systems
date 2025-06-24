@@ -11,7 +11,7 @@ end
 theta_true = [1.2; 0.8];
 x0 = 0;
 T = 10;
-fs = 10000;
+fs = 1000;
 t = 0:1/fs:T;
 dt = t(2) - t(1);
 
@@ -19,53 +19,84 @@ dt = t(2) - t(1);
 f = @(t, x, ufun) -x^3 + theta_true(1)*tanh(x) + theta_true(2)/(1 + x^2) + ufun(t);
 
 % Get training data
-u1 = @(t) sin(t) + sin(3 * t);
+u1 = @(t) ones(size(t));
 u_train = u1(t)';
 odefun = @(t, x) f(t, x, u1);
 [~, x_train] = ode45(odefun, t, x0);
 
 % Get testing data
-u2 = @(t) sin(2 * t);
+u2 = @(t) sin(t);
 u_test = u2(t)';
 odefun = @(t, x) f(t, x, u2);
 [~, x_test] = ode45(odefun, t, x0);
 
-%% Online Estimation with Lyapunov Gradient + Sigma-Modification
+%% Online Estimation with Lyapunov Gradient + Sigma-Modification (Multiple Bases)
 
-% Parameters
-gamma = 0.1;                % learning rate
-M = 10;                     % threshold for σ-modification
-sigma_bar = 15;             % max sigma value
-max_params = 14;            % Maximum number of parameters i.e. length of the regressor vector
-basis = 'poly';
-training_errors = NaN(1, max_params);
-testing_errors = NaN(1, max_params);
+% Setup
+gamma = 0.1;
+M = 10;
+sigma_bar = 5;
+max_params = 16;
 
-for i = 1:max_params
+basis_types = {'poly', 'gauss', 'cos'};
+colors = lines(length(basis_types));  % distinct plot colors
 
-    params = struct('order', i);
+% Preallocate
+training_errors_all = NaN(length(basis_types), max_params);
+testing_errors_all = NaN(length(basis_types), max_params);
 
-    % Estimate parameters from training data
-    Phi = generate_regressor(x_train, u_train, 'poly', params);
-    [x_hat_train, theta_hist] = gradient_nonlinear(x_train, Phi, gamma, M, sigma_bar, dt);
+for b = 1:length(basis_types)
+    basis = basis_types{b};
 
-    % Compute bias error from training data
-    training_errors(i) = mean((x_train - x_hat_train).^2);
+    for i = 1:max_params
+        switch basis
+            case 'poly'
+                params = struct('order', i);
 
-    % Evaluate model from testing data
-    theta_hat = theta_hist(end,:)';
-    Phi = generate_regressor(x_test, u_test, 'poly', params);
-    x_hat_test = Phi * theta_hat;
+            case 'gauss'
+                % Use i Gaussian centers linearly spaced between min and max of training x
+                centers = linspace(min(x_train), max(x_train), i);
+                width = (max(x_train) - min(x_train)) / i;
+                params = struct('centers', centers, 'width', width);
 
-    % Compute modeling error from testing data
-    testing_errors(i) = mean((x_test - x_hat_test).^2);
+            case 'cos'
+                freqs = 1:i;
+                params = struct('freqs', freqs);
+
+            otherwise
+                error('Unsupported basis type "%s"', basis);
+        end
+
+        % Training phase
+        Phi_train = generate_regressor(x_train, u_train, basis, params);
+        [x_hat_train, theta_hist] = gradient_nonlinear(x_train, Phi_train, gamma, M, sigma_bar, dt);
+        training_errors_all(b, i) = mean((x_train - x_hat_train).^2);
+
+        % Testing phase
+        theta_hat = theta_hist(end, :)';
+        Phi_test = generate_regressor(x_test, u_test, basis, params);
+        x_hat_test = Phi_test * theta_hat;
+        testing_errors_all(b, i) = mean((x_test - x_hat_test).^2);
+    end
 end
 
+
 figure; hold on;
-plot(1:max_params, testing_errors, '-k', 'LineWidth', 1.5);
-plot(1:max_params, training_errors, '--r', 'LineWidth', 1);
-legend({'Training Error', 'Testing Error'});
+
+for b = 1:length(basis_types)
+    plot(1:max_params, testing_errors_all(b,:), '-', 'LineWidth', 1.8, ...
+        'Color', colors(b,:), 'DisplayName', [basis_types{b} ' (Test)']);
+    plot(1:max_params, training_errors_all(b,:), '--', 'LineWidth', 1.2, ...
+        'Color', colors(b,:), 'DisplayName', [basis_types{b} ' (Train)']);
+end
+
 xlabel('Number of Parameters');
-ylabel('Modeling Error');
-title('Modeling Error vs Model Complexity');
+ylabel('MSE');
+title('Training & Testing Error vs Model Complexity');
+legend('Location', 'best');
 grid on;
+
+% Export file
+filename = fullfile(outputDir, 'task2_modeling_error_vs_model_complexity.pdf');
+exportgraphics(gcf, filename, 'ContentType', 'vector');
+
