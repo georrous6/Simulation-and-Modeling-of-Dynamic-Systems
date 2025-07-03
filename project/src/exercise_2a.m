@@ -13,24 +13,11 @@ x0 = 0;
 T = 10;
 fs = 1000;
 t = 0:1/fs:T;
-dt = t(2) - t(1);
 
 % Nonlinear Dynamics
 f = @(t, x, ufun) -x^3 + theta_true(1)*tanh(x) + theta_true(2)/(1 + x^2) + ufun(t);
 
-% Get training data
-u1 = @(t) ones(size(t));
-u_train = u1(t)';
-odefun = @(t, x) f(t, x, u1);
-[~, x_train] = ode45(odefun, t, x0);
-
-% Get testing data
-u2 = @(t) sin(t);
-u_test = u2(t)';
-odefun = @(t, x) f(t, x, u2);
-[~, x_test] = ode45(odefun, t, x0);
-
-%% Online Estimation with Lyapunov Gradient + Sigma-Modification (Multiple Bases)
+%% Model Structure Selection using Lyapunov Gradient + Sigma-Modification
 
 % Setup
 gamma = 0.1;
@@ -39,64 +26,47 @@ sigma_bar = 5;
 max_params = 16;
 
 basis_types = {'poly', 'gauss', 'cos'};
-colors = lines(length(basis_types));  % distinct plot colors
+filename = fullfile(outputDir, 'task2_modeling_error_vs_model_complexity.pdf');
 
-% Preallocate
-training_errors_all = NaN(length(basis_types), max_params);
-testing_errors_all = NaN(length(basis_types), max_params);
+u1 = @(t) ones(size(t));
+u2 = @(t) sin(t);
+inputs = {u1, u2};
 
-for b = 1:length(basis_types)
-    basis = basis_types{b};
+[model_params, model_order] = model_complexity_vs_error(basis_types, ...
+    max_params, f, t, x0, inputs, M, sigma_bar, gamma, filename);
 
-    for i = 1:max_params
-        switch basis
-            case 'poly'
-                params = struct('order', i);
+%% Candidate Models Cross Validation
 
-            case 'gauss'
-                % Use i Gaussian centers linearly spaced between min and max of training x
-                centers = linspace(min(x_train), max(x_train), i);
-                width = (max(x_train) - min(x_train)) / i;
-                params = struct('centers', centers, 'width', width);
+% Generate input signals
+inputs = {@(t) ones(size(t));
+          @(t) sin(2*pi*t);
+          @(t) sin(2*pi*t + sin(0.5*pi*t));
+          @(t) exp(-t) + ones(size(t));
+          @(t) sin(pi*t) + sin(3*pi*t)};
 
-            case 'cos'
-                freqs = 1:i;
-                params = struct('freqs', freqs);
+filename = fullfile(outputDir, 'task2_cross_validation.pdf');
+model_cross_validation(basis_types, model_params, model_order, f, t, x0, inputs, M, sigma_bar, gamma, filename);
 
-            otherwise
-                error('Unsupported basis type "%s"', basis);
-        end
+%% Final Model Selection
+N = 5;
+inputs = cell(1, N);
 
-        % Training phase
-        Phi_train = generate_regressor(x_train, u_train, basis, params);
-        [x_hat_train, theta_hist] = gradient_nonlinear(x_train, Phi_train, gamma, M, sigma_bar, dt);
-        training_errors_all(b, i) = mean((x_train - x_hat_train).^2);
-
-        % Testing phase
-        theta_hat = theta_hist(end, :)';
-        Phi_test = generate_regressor(x_test, u_test, basis, params);
-        x_hat_test = Phi_test * theta_hat;
-        testing_errors_all(b, i) = mean((x_test - x_hat_test).^2);
+for k = 1:N
+    inputs{k} = @(t) 0;
+    for n = 1:k
+        freq = n;
+        prevFunc = inputs{k};
+        inputs{k} = @(t) prevFunc(t) + sin(freq * pi * t);
     end
 end
 
+for i = 1:N
+    u = inputs{i};
+    u_train = u(t);
+    odefun = @(t, x) f(t, x, u);
+    [~, x_train] = ode45(odefun, t, x0);
 
-figure; hold on;
-
-for b = 1:length(basis_types)
-    plot(1:max_params, testing_errors_all(b,:), '-', 'LineWidth', 1.8, ...
-        'Color', colors(b,:), 'DisplayName', [basis_types{b} ' (Test)']);
-    plot(1:max_params, training_errors_all(b,:), '--', 'LineWidth', 1.2, ...
-        'Color', colors(b,:), 'DisplayName', [basis_types{b} ' (Train)']);
+    % Training phase
+    Phi_train = generate_regressor(x_train, u_train, 'poly', model_params{1});
+    [~, theta_hist] = gradient_nonlinear(x_train, Phi_train, gamma, M, sigma_bar, dt);
 end
-
-xlabel('Number of Parameters');
-ylabel('MSE');
-title('Training & Testing Error vs Model Complexity');
-legend('Location', 'best');
-grid on;
-
-% Export file
-filename = fullfile(outputDir, 'task2_modeling_error_vs_model_complexity.pdf');
-exportgraphics(gcf, filename, 'ContentType', 'vector');
-
