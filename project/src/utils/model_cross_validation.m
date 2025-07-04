@@ -63,7 +63,7 @@ function kfold_avg_mse = model_cross_validation(basis_types, model_params, order
     xlabel('Train Fold Index');
     ylabel('Average K-Fold MSE');
     title('K-Fold Cross Validation');
-    legend('Location', 'best');
+    legend show;
     grid on;
     
     % Export file
