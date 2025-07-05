@@ -80,44 +80,41 @@ filename = fullfile(outputDir, 'task1_gradient_identification_error.pdf');
 exportgraphics(gcf, filename, 'ContentType', 'vector');
 
 
-%% Plot Parameter Estimation MSE vs Bias Error Amplitude
+%% Estimation MSE vs Bias Amplitude
 n_values = 20;
 omega_bar_values = linspace(0.1, 10, n_values);
-mse_values = NaN(n_values, 6);
+mse_theta_values = NaN(n_values, 6);
+mse_state_values = NaN(n_values, 2);
 theta_star = [A(1,1), A(1,2), A(2,1), A(2,2), B(1), B(2)];
 for i = 1:n_values
     omega_bar = omega_bar_values(i);
     omegafun = @(t) omega_bar * [sin(2*pi*fw*t(:)), cos(2*pi*fw*t(:))];
     Y = gradient_descend(t, x, u(t), lambda, gamma, M, sigma_bar, omegafun, A, B, A_0, B_0);
+    x_measured = Y(:,1:2);
+    x_hat = Y(:,3:4);
     theta_hat = Y(:,5:end);
-    mse_values(i,:) = mean((theta_hat - theta_star).^2);
+    mse_theta_values(i,:) = mean((theta_hat - theta_star).^2);
+    mse_state_values(i,:) = mean((x_measured - x_hat).^2);
 end
 
+% Plot parameter estimation error vs bias amplitude
 figure;
-plot(omega_bar_values, mse_values, 'LineWidth', 1.5);
+plot(omega_bar_values, mse_theta_values, 'LineWidth', 1.5);
 xlabel('$\bar{\omega}$', 'Interpreter', 'latex');
-ylabel('MSE');
-title('Parameter Estimation MSE vs Bias Error Amplitude');
+ylabel('Parametric MSE');
+title('Parametric MSE vs Bias Amplitude');
 grid on;
 
-filename = fullfile(outputDir, 'task1_mse_vs_bias_error_amplitude.pdf');
+filename = fullfile(outputDir, 'task1_parametric_mse_vs_bias_amplitude.pdf');
 exportgraphics(gcf, filename, 'ContentType', 'vector');
 
-%% Plot Parameter Estimation MSE vs Sigma Modification Gain
-gamma_values = linspace(0.1, 10, n_values);
-for i = 1:n_values
-    gamma = gamma_values(i);
-    Y = gradient_descend(t, x, u(t), lambda, gamma, M, sigma_bar, omegafun, A, B, A_0, B_0);
-    theta_hat = Y(:,5:end);
-    mse_values(i,:) = mean((theta_hat - theta_star).^2);
-end
-
+% Plot identification error vs bias amplitude
 figure;
-plot(gamma_values, mse_values, 'LineWidth', 1.5);
-xlabel('$\gamma$', 'Interpreter', 'latex');
-ylabel('MSE');
-title('Parameter Estimation MSE vs Gamma Gain');
+plot(omega_bar_values, mse_state_values, 'LineWidth', 1.5);
+xlabel('$\bar{\omega}$', 'Interpreter', 'latex');
+ylabel('Identification MSE');
+title('Identification MSE vs Bias Amplitude');
 grid on;
 
-filename = fullfile(outputDir, 'task1_mse_vs_gamma_gain.pdf');
+filename = fullfile(outputDir, 'task1_identification_mse_vs_bias_amplitude.pdf');
 exportgraphics(gcf, filename, 'ContentType', 'vector');
