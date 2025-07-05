@@ -15,7 +15,8 @@ B = [0; 1.5];
 fs = 20;
 
 % Define time points
-t = 0:1/fs:30;
+T = 30;
+t = 0:1/fs:T;
 
 % Initial condition
 x0 = [0; 0];
